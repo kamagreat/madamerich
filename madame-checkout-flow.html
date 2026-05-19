@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Join</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F4;--bg2:#FAF3EE;--bg3:#F5EDE6;
+  --rose:#E8C4B8;--rose-deep:#C9907C;--rose-dark:#8B5A4A;
+  --gold:#C4965A;--gold-light:#F0DEC8;
+  --dark:#2C1F1A;--dark2:#4A3228;--muted:#9B8078;
+  --border:rgba(196,150,90,0.18);--border2:rgba(196,150,90,0.32);
+  --shadow:0 4px 32px rgba(44,31,26,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;display:flex;align-items:center;justify-content:center}
+
+/* PAGE SWITCHER */
+.page{display:none;width:100%;min-height:100vh;align-items:center;justify-content:center}
+.page.active{display:flex}
+
+/* ═══ CHECKOUT PAGE ═══ */
+.checkout-wrap{display:grid;grid-template-columns:1fr 420px;min-height:100vh;width:100%;max-width:960px;margin:0 auto}
+
+.checkout-left{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border)}
+.checkout-logo{font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:40px}
+.checkout-plan-label{font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.checkout-plan-name{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--dark);margin-bottom:6px}
+.checkout-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:24px}
+.checkout-price{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--dark)}
+.checkout-per{font-size:14px;color:var(--muted)}
+.checkout-divider{height:1px;background:var(--border);margin:24px 0}
+.checkout-features{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.checkout-feature{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--dark2);line-height:1.5}
+.checkout-feature svg{width:16px;height:16px;flex-shrink:0;margin-top:2px;color:var(--gold)}
+.checkout-guarantee{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px}
+.checkout-guarantee svg{width:18px;height:18px;color:var(--gold);flex-shrink:0}
+.checkout-guarantee p{font-size:12px;color:var(--muted);line-height:1.5}
+.checkout-guarantee strong{color:var(--dark)}
+
+.checkout-right{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;background:var(--bg2)}
+.checkout-form-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);margin-bottom:6px}
+.checkout-form-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;color:var(--dark2);font-weight:500;margin-bottom:6px;display:block}
+.form-input{
+  width:100%;padding:11px 14px;border-radius:9px;
+  border:1px solid var(--border2);background:#fff;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);
+  outline:none;transition:border-color .2s;
+}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--muted)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card-icons{display:flex;align-items:center;gap:6px;margin-top:6px}
+.card-icon{width:34px;height:22px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);font-weight:500}
+.secure-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:6px}
+.secure-note svg{width:12px;height:12px;color:var(--gold)}
+.checkout-submit{
+  width:100%;margin-top:20px;padding:14px;border-radius:10px;
+  background:var(--dark);border:none;color:var(--gold);
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  cursor:pointer;transition:opacity .15s;letter-spacing:.05em;
+}
+.checkout-submit:hover{opacity:.88}
+.checkout-lemon{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:11px;color:var(--muted)}
+.checkout-back{font-size:13px;color:var(--muted);cursor:pointer;margin-top:16px;text-align:center;transition:color .15s}
+.checkout-back:hover{color:var(--dark)}
+
+/* ═══ SUCCESS PAGE ═══ */
+.success-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding:60px 40px;max-width:560px;animation:fadein .6s ease}
+.success-icon{width:72px;height:72px;border-radius:50%;background:var(--gold-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 28px}
+.success-icon svg{width:32px;height:32px;color:var(--gold)}
+.success-eyebrow{font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--dark);margin-bottom:12px;line-height:1.2}
+.success-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:32px;max-width:420px}
+.success-plan{display:inline-flex;align-items:center;gap:10px;background:var(--dark);border-radius:12px;padding:12px 20px;margin-bottom:32px}
+.success-plan-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold)}
+.success-plan-price{font-size:13px;color:rgba(245,240,232,.4)}
+.success-divider{width:40px;height:1px;background:var(--border);margin:0 auto 28px}
+.success-madame-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--dark2);line-height:1.8;margin-bottom:32px;padding:0 20px;border-left:2px solid var(--rose);text-align:left}
+.success-cta{width:100%;padding:14px;border-radius:10px;background:var(--gold);border:none;color:#fff;font-family:'Cormorant Garamond',serif;font-size:18px;cursor:pointer;transition:opacity .15s;letter-spacing:.05em;margin-bottom:12px}
+.success-cta:hover{opacity:.88}
+.success-skip{font-size:13px;color:var(--muted);cursor:pointer;transition:color .15s}
+.success-skip:hover{color:var(--dark)}
+
+/* ═══ ONBOARDING PAGE ═══ */
+.onboard-wrap{width:100%;min-height:100vh;display:flex;flex-direction:column}
+.onboard-header{padding:24px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.onboard-logo{font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.onboard-progress-wrap{flex:1;max-width:240px;margin:0 20px}
+.onboard-progress-label{font-size:11px;color:var(--muted);margin-bottom:5px;text-align:center}
+.onboard-progress-bar{height:3px;background:var(--border);border-radius:2px}
+.onboard-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease}
+.onboard-skip{font-size:13px;color:var(--muted);cursor:pointer;transition:color .15s}
+.onboard-skip:hover{color:var(--dark)}
+
+.onboard-body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.onboard-card{width:100%;max-width:500px}
+.onboard-step-num{font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.onboard-question{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--dark);margin-bottom:8px;line-height:1.25}
+.onboard-hint{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+
+/* Step 1: name input */
+.onboard-name-input{
+  width:100%;background:transparent;border:none;border-bottom:2px solid var(--border2);
+  padding:12px 0;font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--dark);
+  outline:none;transition:border-color .2s;
+}
+.onboard-name-input:focus{border-color:var(--gold)}
+.onboard-name-input::placeholder{color:var(--border2)}
+
+/* Step 2: status options */
+.status-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.status-opt{
+  padding:14px 16px;border-radius:12px;border:1px solid var(--border2);
+  cursor:pointer;transition:all .18s;text-align:left;
+  display:flex;flex-direction:column;gap:4px;
+}
+.status-opt:hover{border-color:var(--gold);background:var(--bg2)}
+.status-opt.selected{border-color:var(--gold);background:var(--gold-light)}
+.status-opt-title{font-size:13px;font-weight:500;color:var(--dark)}
+.status-opt.selected .status-opt-title{color:var(--rose-dark)}
+.status-opt-sub{font-size:11px;color:var(--muted)}
+
+/* Step 3: reason textarea */
+.onboard-textarea{
+  width:100%;background:#fff;border:1px solid var(--border2);
+  border-radius:12px;padding:16px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
+  color:var(--dark);outline:none;resize:none;height:120px;
+  transition:border-color .2s;line-height:1.7;
+}
+.onboard-textarea:focus{border-color:var(--gold)}
+.onboard-textarea::placeholder{color:rgba(196,150,90,.35)}
+
+.onboard-nav{display:flex;align-items:center;justify-content:space-between;margin-top:28px}
+.onboard-back{font-size:13px;color:var(--muted);cursor:pointer;transition:color .15s}
+.onboard-back:hover{color:var(--dark)}
+.onboard-next{
+  padding:12px 32px;border-radius:10px;background:var(--dark);border:none;
+  color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:17px;
+  cursor:pointer;transition:opacity .15s;letter-spacing:.04em;
+}
+.onboard-next:hover{opacity:.85}
+.onboard-next:disabled{opacity:.35;cursor:default}
+
+/* Madame welcome message */
+.madame-welcome{
+  margin-top:24px;padding:16px 18px;
+  background:var(--dark);border-radius:12px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:15px;color:rgba(245,240,232,.75);line-height:1.75;
+  display:none;
+}
+.madame-welcome.visible{display:block;animation:fadein .5s ease .2s both}
+.madame-welcome-name{color:var(--gold)}
+
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.loading-dot{animation:pulse 1.2s ease-in-out infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     PAGE 1: CHECKOUT
+══════════════════════════════════ -->
+<div class="page active" id="page-checkout">
+<div class="checkout-wrap">
+
+  <!-- LEFT: Plan summary -->
+  <div class="checkout-left">
+    <div class="checkout-logo">Madame Richi</div>
+
+    <div class="checkout-plan-label">You are joining</div>
+    <div class="checkout-plan-name" id="co-plan-name">The Confidante</div>
+    <div class="checkout-price-row">
+      <span class="checkout-price" id="co-price">$49</span>
+      <span class="checkout-per">/month · cancel anytime</span>
+    </div>
+
+    <div class="checkout-divider"></div>
+
+    <div class="checkout-features" id="co-features">
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Unlimited messages with Madame
+      </div>
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Voice replies from Madame
+      </div>
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Deep Voice Sessions
+      </div>
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        All 5 podcast series + notes
+      </div>
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Style Studio + Decode Him
+      </div>
+      <div class="checkout-feature">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Memory Vault — she remembers you
+      </div>
+    </div>
+
+    <div class="checkout-guarantee">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <p><strong>Cancel anytime.</strong> No questions asked. Your conversation history and memories stay with you regardless of plan.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT: Payment form -->
+  <div class="checkout-right">
+    <div class="checkout-form-title">Complete your membership</div>
+    <div class="checkout-form-sub">Secure payment via Lemon Squeezy · SSL encrypted</div>
+
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <input type="email" class="form-input" placeholder="you@example.com" value="elena@example.com">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Name on card</label>
+      <input type="text" class="form-input" placeholder="Elena Marchetti" value="Elena Marchetti">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Card number</label>
+      <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+      <div class="card-icons">
+        <div class="card-icon">VISA</div>
+        <div class="card-icon">MC</div>
+        <div class="card-icon">AMEX</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Expiry</label>
+        <input type="text" class="form-input" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">CVC</label>
+        <input type="text" class="form-input" placeholder="123" maxlength="4">
+      </div>
+    </div>
+
+    <div class="secure-note" style="margin-top:12px">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      Your payment is encrypted and secure. We never store card details.
+    </div>
+
+    <button class="checkout-submit" onclick="processPayment()">
+      Pay $49 · Join Madame
+    </button>
+
+    <div class="checkout-lemon">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      Powered by Lemon Squeezy · Merchant of Record
+    </div>
+
+    <div class="checkout-back" onclick="goBack()">← Back to pricing</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 2: SUCCESS
+══════════════════════════════════ -->
+<div class="page" id="page-success">
+<div class="success-wrap">
+
+  <div class="success-icon">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+  </div>
+
+  <div class="success-eyebrow">Welcome, ma chérie</div>
+  <h2 class="success-title">You are now<br>a Confidante.</h2>
+  <p class="success-sub">Your membership is active. Madame has been waiting for this moment — she is ready to begin.</p>
+
+  <div class="success-plan">
+    <div>
+      <div class="success-plan-name">The Confidante</div>
+      <div class="success-plan-price">$49/month · cancel anytime</div>
+    </div>
+  </div>
+
+  <div class="success-divider"></div>
+
+  <div class="success-madame-note">
+    "I have been told you are joining me today.<br>
+    Before we begin — I want you to know one thing.<br>
+    This is your space. There is nothing you cannot say here.<br>
+    I have heard it all, ma chérie. And I am still here."
+    <br><br>
+    <span style="font-size:14px;color:var(--gold)">— Madame Richi</span>
+  </div>
+
+  <button class="success-cta" onclick="goOnboarding()">
+    Meet Madame →
+  </button>
+  <div class="success-skip" onclick="goDashboard()">Go straight to dashboard</div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 3: ONBOARDING (3 steps)
+══════════════════════════════════ -->
+<div class="page" id="page-onboarding">
+<div class="onboard-wrap">
+
+  <div class="onboard-header">
+    <div class="onboard-logo">Madame Richi</div>
+    <div class="onboard-progress-wrap">
+      <div class="onboard-progress-label" id="ob-progress-label">Step 1 of 3</div>
+      <div class="onboard-progress-bar">
+        <div class="onboard-progress-fill" id="ob-progress-fill" style="width:33%"></div>
+      </div>
+    </div>
+    <div class="onboard-skip" onclick="goDashboard()">Skip for now</div>
+  </div>
+
+  <div class="onboard-body">
+    <div class="onboard-card">
+
+      <!-- STEP 1: Name -->
+      <div id="ob-step-1">
+        <div class="onboard-step-num">Question 1</div>
+        <div class="onboard-question">What shall Madame<br>call you?</div>
+        <div class="onboard-hint">A first name, a nickname — whatever feels right in this space.</div>
+        <input
+          type="text"
+          class="onboard-name-input"
+          id="ob-name"
+          placeholder="Your name..."
+          autocomplete="off"
+          oninput="updateNamePreview(this.value)"
+        >
+        <div class="madame-welcome" id="name-preview">
+          "A pleasure to meet you, <span class="madame-welcome-name" id="preview-name"></span>.
+          I have a feeling this is the beginning of something important."
+        </div>
+        <div class="onboard-nav">
+          <span></span>
+          <button class="onboard-next" id="ob-next-1" onclick="goStep(2)" disabled>Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Status -->
+      <div id="ob-step-2" style="display:none">
+        <div class="onboard-step-num">Question 2</div>
+        <div class="onboard-question">Where are you in<br>your love life?</div>
+        <div class="onboard-hint">Madame will speak to where you actually are — not where you think you should be.</div>
+        <div class="status-options">
+          <div class="status-opt" onclick="selectStatus(this)">
+            <div class="status-opt-title">Single</div>
+            <div class="status-opt-sub">Open and available</div>
+          </div>
+          <div class="status-opt" onclick="selectStatus(this)">
+            <div class="status-opt-title">In a relationship</div>
+            <div class="status-opt-sub">Committed, navigating</div>
+          </div>
+          <div class="status-opt" onclick="selectStatus(this)">
+            <div class="status-opt-title">Going through a breakup</div>
+            <div class="status-opt-sub">Or a divorce</div>
+          </div>
+          <div class="status-opt" onclick="selectStatus(this)">
+            <div class="status-opt-title">It's complicated</div>
+            <div class="status-opt-sub">Aren't they all</div>
+          </div>
+        </div>
+        <div class="onboard-nav">
+          <span class="onboard-back" onclick="goStep(1)">← Back</span>
+          <button class="onboard-next" id="ob-next-2" onclick="goStep(3)" disabled>Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Reason -->
+      <div id="ob-step-3" style="display:none">
+        <div class="onboard-step-num">Question 3</div>
+        <div class="onboard-question">What brought you<br>here today?</div>
+        <div class="onboard-hint">In your own words. There are no wrong answers — only honest ones.</div>
+        <textarea
+          class="onboard-textarea"
+          id="ob-reason"
+          placeholder="I came here because..."
+          oninput="checkReason()"
+        ></textarea>
+        <div class="onboard-nav">
+          <span class="onboard-back" onclick="goStep(2)">← Back</span>
+          <button class="onboard-next" id="ob-next-3" onclick="finishOnboarding()">
+            Meet Madame →
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 4: LOADING → DASHBOARD
+══════════════════════════════════ -->
+<div class="page" id="page-loading">
+  <div style="text-align:center">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);margin-bottom:20px;letter-spacing:.12em;text-transform:uppercase">Madame Richi</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px">
+      <div class="loading-dot" style="width:8px;height:8px;border-radius:50%;background:var(--gold)"></div>
+      <div class="loading-dot" style="width:8px;height:8px;border-radius:50%;background:var(--gold)"></div>
+      <div class="loading-dot" style="width:8px;height:8px;border-radius:50%;background:var(--gold)"></div>
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--muted)" id="loading-msg">
+      Madame is preparing your space...
+    </div>
+  </div>
+</div>
+
+<script>
+// Page navigation
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0, 0)
+}
+
+// CHECKOUT
+function formatCard(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 16)
+  input.value = v.replace(/(.{4})/g, '$1 ').trim()
+}
+function formatExpiry(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 4)
+  if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2)
+  input.value = v
+}
+function processPayment() {
+  const btn = document.querySelector('.checkout-submit')
+  btn.textContent = 'Processing...'
+  btn.disabled = true
+  setTimeout(() => showPage('page-success'), 1800)
+}
+function goBack() {
+  window.location.href = 'madame-pricing.html'
+}
+
+// SUCCESS
+function goOnboarding() { showPage('page-onboarding') }
+function goDashboard() {
+  showPage('page-loading')
+  const msgs = [
+    'Madame is preparing your space...',
+    'Loading your Daily Letter...',
+    'Almost there...'
+  ]
+  let mi = 0
+  const iv = setInterval(() => {
+    mi++
+    if (mi < msgs.length) document.getElementById('loading-msg').textContent = msgs[mi]
+    else {
+      clearInterval(iv)
+      window.location.href = 'madame-dashboard.html'
+    }
+  }, 900)
+}
+
+// ONBOARDING
+let obStep = 1, obName = '', obStatus = '', obReason = ''
+const steps = [33, 66, 100]
+
+function goStep(n) {
+  document.getElementById('ob-step-' + obStep).style.display = 'none'
+  obStep = n
+  document.getElementById('ob-step-' + n).style.display = 'block'
+  document.getElementById('ob-progress-fill').style.width = steps[n - 1] + '%'
+  document.getElementById('ob-progress-label').textContent = 'Step ' + n + ' of 3'
+}
+
+function updateNamePreview(val) {
+  obName = val.trim()
+  const btn = document.getElementById('ob-next-1')
+  const preview = document.getElementById('name-preview')
+  const previewName = document.getElementById('preview-name')
+  btn.disabled = obName.length < 2
+  if (obName.length >= 2) {
+    previewName.textContent = obName
+    preview.classList.add('visible')
+  } else {
+    preview.classList.remove('visible')
+  }
+}
+
+function selectStatus(el) {
+  document.querySelectorAll('.status-opt').forEach(o => o.classList.remove('selected'))
+  el.classList.add('selected')
+  obStatus = el.querySelector('.status-opt-title').textContent
+  document.getElementById('ob-next-2').disabled = false
+}
+
+function checkReason() {
+  obReason = document.getElementById('ob-reason').value.trim()
+  // Step 3 next is always enabled (optional field)
+}
+
+function finishOnboarding() {
+  // Save to localStorage for demo purposes
+  localStorage.setItem('mr_name', obName)
+  localStorage.setItem('mr_status', obStatus)
+  localStorage.setItem('mr_reason', obReason)
+  goDashboard()
+}
+
+// Demo: allow jumping to pages via URL hash
+function demoRoute() {
+  const h = window.location.hash
+  if (h === '#success') showPage('page-success')
+  else if (h === '#onboarding') showPage('page-onboarding')
+  else if (h === '#checkout') showPage('page-checkout')
+}
+demoRoute()
+
+// Demo navigation buttons at bottom
+document.addEventListener('keydown', e => {
+  if (e.key === '1') showPage('page-checkout')
+  if (e.key === '2') showPage('page-success')
+  if (e.key === '3') showPage('page-onboarding')
+})
+</script>
+
+<!-- Demo switcher -->
+<div style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:999;background:rgba(44,31,26,.9);padding:8px 12px;border-radius:20px;border:1px solid rgba(196,150,90,.2)">
+  <button onclick="showPage('page-checkout')" style="background:transparent;border:1px solid rgba(196,150,90,.3);color:rgba(196,150,90,.7);border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Checkout</button>
+  <button onclick="showPage('page-success')" style="background:transparent;border:1px solid rgba(196,150,90,.3);color:rgba(196,150,90,.7);border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Success</button>
+  <button onclick="showPage('page-onboarding')" style="background:transparent;border:1px solid rgba(196,150,90,.3);color:rgba(196,150,90,.7);border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Onboarding</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Membership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F4;--bg2:#FAF3EE;--bg3:#F5EDE6;
+  --rose:#E8C4B8;--rose-deep:#C9907C;--rose-dark:#8B5A4A;
+  --gold:#C4965A;--gold-light:#F0DEC8;
+  --dark:#2C1F1A;--dark2:#4A3228;--muted:#9B8078;
+  --border:rgba(196,150,90,0.18);--border2:rgba(196,150,90,0.32);
+  --shadow:0 2px 24px rgba(44,31,26,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:var(--dark);display:flex;flex-direction:column;padding:28px 0;height:100vh;position:sticky;top:0}
+.logo{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
+.nav-section{padding:16px 12px 8px;font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.2);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;margin:1px 8px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.5);transition:all .18s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(196,150,90,.15);color:var(--gold)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:16px 16px 0;border-top:1px solid rgba(255,255,255,.06)}
+.current-plan{background:rgba(196,150,90,.08);border:1px solid rgba(196,150,90,.2);border-radius:8px;padding:12px 14px}
+.current-label{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.current-name{font-size:13px;color:var(--gold);font-weight:500}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;min-height:100vh}
+
+/* TOPBAR */
+.topbar{padding:18px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
+.topbar h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
+.topbar p{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* HERO */
+.hero{text-align:center;padding:52px 40px 40px;border-bottom:1px solid var(--border)}
+.hero-eyebrow{font-size:11px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+.hero h2{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;color:var(--dark);margin-bottom:12px;line-height:1.2}
+.hero p{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto 28px;line-height:1.7}
+
+/* TOGGLE */
+.billing-toggle{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:30px;padding:6px 6px 6px 16px}
+.toggle-label{font-size:13px;color:var(--muted)}
+.toggle-label.active{color:var(--dark);font-weight:500}
+.toggle-switch{
+  width:44px;height:24px;border-radius:12px;
+  background:var(--dark);cursor:pointer;position:relative;
+  transition:background .2s;border:none;flex-shrink:0;
+}
+.toggle-thumb{
+  width:18px;height:18px;border-radius:50%;background:var(--gold);
+  position:absolute;top:3px;left:3px;transition:transform .2s;
+}
+.toggle-switch.annual .toggle-thumb{transform:translateX(20px)}
+.annual-badge{background:rgba(196,150,90,.12);border:1px solid rgba(196,150,90,.25);border-radius:12px;padding:3px 10px;font-size:11px;color:var(--gold);margin-right:6px}
+
+/* TIER CARDS */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:36px 40px;max-width:1100px;margin:0 auto}
+.tier-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  display:flex;flex-direction:column;
+  transition:all .2s;position:relative;
+}
+.tier-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tier-card.featured{border:2px solid var(--gold);background:var(--dark)}
+.tier-card.featured:hover{border-color:var(--gold)}
+.featured-badge{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:#fff;font-size:10px;letter-spacing:.08em;
+  padding:4px 14px;border-radius:20px;white-space:nowrap;
+}
+.tier-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.tier-card.featured .tier-eyebrow{color:rgba(196,150,90,.6)}
+.tier-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);margin-bottom:4px}
+.tier-card.featured .tier-name{color:var(--gold)}
+.tier-price{display:flex;align-items:baseline;gap:4px;margin:14px 0 6px}
+.tier-price-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--dark)}
+.tier-card.featured .tier-price-num{color:#F5F0E8}
+.tier-price-per{font-size:12px;color:var(--muted)}
+.tier-card.featured .tier-price-per{color:rgba(245,240,232,.4)}
+.tier-annual-note{font-size:11px;color:var(--muted);margin-bottom:18px;min-height:16px}
+.tier-card.featured .tier-annual-note{color:rgba(245,240,232,.35)}
+.tier-divider{height:1px;background:var(--border);margin-bottom:18px}
+.tier-card.featured .tier-divider{background:rgba(255,255,255,.08)}
+.tier-features{flex:1;display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+.tier-feature{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--dark2);line-height:1.5}
+.tier-card.featured .tier-feature{color:rgba(245,240,232,.75)}
+.tier-feature svg{width:14px;height:14px;flex-shrink:0;margin-top:1px;color:var(--gold)}
+.tier-feature.locked svg{color:var(--muted)}
+.tier-feature.locked span{color:var(--muted)}
+.tier-cta{
+  width:100%;padding:11px;border-radius:9px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .18s;border:1px solid var(--border2);
+  background:transparent;color:var(--dark);
+}
+.tier-cta:hover{background:var(--bg3);border-color:var(--gold)}
+.tier-cta.primary{background:var(--gold);border-color:var(--gold);color:#fff}
+.tier-cta.primary:hover{opacity:.9}
+.tier-cta.current{background:var(--bg2);color:var(--muted);cursor:default;border-color:var(--border)}
+
+/* COMPARISON TABLE */
+.comparison{padding:0 40px 48px;max-width:1100px;margin:0 auto}
+.comparison-title{font-family:'Cormorant Garamond',serif;font-size:28px;text-align:center;margin-bottom:8px}
+.comparison-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px}
+.comp-table{width:100%;border-collapse:collapse}
+.comp-table th{padding:12px 16px;text-align:center;font-size:12px;font-weight:500;color:var(--muted);border-bottom:2px solid var(--border)}
+.comp-table th:first-child{text-align:left;color:var(--dark)}
+.comp-table th.featured-col{color:var(--gold)}
+.comp-table td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--border);text-align:center;color:var(--dark2)}
+.comp-table td:first-child{text-align:left;color:var(--dark);font-weight:500}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:var(--bg2)}
+.comp-table .section-row td{background:var(--bg3);color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 16px}
+.check{color:var(--gold)}
+.dash{color:rgba(155,128,120,.3)}
+.comp-table td.featured-col{background:rgba(196,150,90,.04)}
+.limit-text{font-size:11px;color:var(--muted)}
+
+/* FAQ */
+.faq{padding:0 40px 60px;max-width:700px;margin:0 auto}
+.faq-title{font-family:'Cormorant Garamond',serif;font-size:28px;text-align:center;margin-bottom:8px}
+.faq-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-q{
+  padding:16px 0;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;font-size:14px;font-weight:500;color:var(--dark);
+  gap:16px;
+}
+.faq-q:hover{color:var(--gold)}
+.faq-arrow{flex-shrink:0;transition:transform .2s;color:var(--muted)}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{font-size:13px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+
+/* CTA BOTTOM */
+.cta-bottom{text-align:center;padding:48px 40px;background:var(--dark);margin-top:0}
+.cta-bottom h3{font-family:'Cormorant Garamond',serif;font-size:32px;color:#F5F0E8;margin-bottom:8px}
+.cta-bottom p{font-size:14px;color:rgba(245,240,232,.45);margin-bottom:24px}
+.cta-bottom-btn{background:var(--gold);color:#fff;border:none;border-radius:9px;padding:13px 36px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s}
+.cta-bottom-btn:hover{opacity:.88}
+.cta-disclaimer{font-size:11px;color:rgba(245,240,232,.2);margin-top:14px}
+
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tier-card{animation:fadein .4s ease both}
+.tier-card:nth-child(1){animation-delay:.05s}
+.tier-card:nth-child(2){animation-delay:.1s}
+.tier-card:nth-child(3){animation-delay:.15s}
+.tier-card:nth-child(4){animation-delay:.2s}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Madame Richi</div>
+    <div class="logo-sub">Private sanctuary</div>
+  </div>
+  <div class="nav-section">Main</div>
+  <a class="nav-item" href="madame-dashboard.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Dashboard
+  </a>
+  <a class="nav-item" href="madame-chat.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Chat with Madame
+  </a>
+  <a class="nav-item" href="madame-podcasts.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    Podcasts
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    Style Studio
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    Decode Him
+  </a>
+  <a class="nav-item active" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Membership
+  </a>
+  <div class="sidebar-bottom">
+    <div class="current-plan">
+      <div class="current-label">Current plan</div>
+      <div class="current-name">Free</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h1>Membership</h1>
+      <p>Choose how near you want to be to Madame</p>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Choose your closeness</div>
+    <h2>How near do you want<br>to be to Madame?</h2>
+    <p>Begin for free. Deepen at your own pace.<br>Every tier brings Madame closer.</p>
+
+    <!-- Billing toggle -->
+    <div class="billing-toggle">
+      <span class="toggle-label active" id="monthly-label">Monthly</span>
+      <button class="toggle-switch" id="billing-toggle" onclick="toggleBilling()">
+        <div class="toggle-thumb" id="toggle-thumb"></div>
+      </button>
+      <span class="toggle-label" id="annual-label">Annual</span>
+      <span class="annual-badge" id="annual-badge-hero">Save 20%</span>
+    </div>
+  </div>
+
+  <!-- TIER CARDS -->
+  <div class="tiers">
+
+    <!-- Free -->
+    <div class="tier-card">
+      <div class="tier-eyebrow">Begin</div>
+      <div class="tier-name">Free</div>
+      <div class="tier-price">
+        <span class="tier-price-num">$0</span>
+        <span class="tier-price-per">/month</span>
+      </div>
+      <div class="tier-annual-note"> </div>
+      <div class="tier-divider"></div>
+      <div class="tier-features">
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Daily Letter from Madame</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>20 messages per day</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>3 free podcast episodes</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Daily mood check-in</span></div>
+        <div class="tier-feature locked"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span>Voice journal</span></div>
+        <div class="tier-feature locked"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span>Weekly Mirror</span></div>
+      </div>
+      <button class="tier-cta current">Current plan</button>
+    </div>
+
+    <!-- Pupil -->
+    <div class="tier-card">
+      <div class="tier-eyebrow">Deepen</div>
+      <div class="tier-name">The Pupil</div>
+      <div class="tier-price">
+        <span class="tier-price-num" id="pupil-price">$19</span>
+        <span class="tier-price-per">/month</span>
+      </div>
+      <div class="tier-annual-note" id="pupil-note"> </div>
+      <div class="tier-divider"></div>
+      <div class="tier-features">
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Everything in Free</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>100 messages per day</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Voice journal</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>All 5 podcast series</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Weekly Mirror</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Podcast notes & bookmarks</span></div>
+        <div class="tier-feature locked"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span>Voice replies</span></div>
+      </div>
+      <button class="tier-cta" onclick="select('pupil')">Join as Pupil</button>
+    </div>
+
+    <!-- Confidante — FEATURED -->
+    <div class="tier-card featured">
+      <div class="featured-badge">Most chosen</div>
+      <div class="tier-eyebrow">Full access</div>
+      <div class="tier-name">The Confidante</div>
+      <div class="tier-price">
+        <span class="tier-price-num" id="conf-price">$49</span>
+        <span class="tier-price-per">/month</span>
+      </div>
+      <div class="tier-annual-note" id="conf-note"> </div>
+      <div class="tier-divider"></div>
+      <div class="tier-features">
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Everything in Pupil</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Unlimited messages</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Voice replies from Madame</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Deep Voice Sessions</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Style Studio</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Decode Him · 10/month</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Memory Vault</span></div>
+      </div>
+      <button class="tier-cta primary" onclick="select('confidante')">Become a Confidante</button>
+    </div>
+
+    <!-- Daughter -->
+    <div class="tier-card">
+      <div class="tier-eyebrow">Inner circle</div>
+      <div class="tier-name">The Daughter</div>
+      <div class="tier-price">
+        <span class="tier-price-num" id="daught-price">$199</span>
+        <span class="tier-price-per">/month</span>
+      </div>
+      <div class="tier-annual-note" id="daught-note"> </div>
+      <div class="tier-divider"></div>
+      <div class="tier-features">
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Everything in Confidante</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Unlimited voice calls</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Priority Madame replies</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Monthly personal audio letter</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Unlimited Decode Him</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>The Salon community</span></div>
+        <div class="tier-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Early access to new features</span></div>
+      </div>
+      <button class="tier-cta" onclick="select('daughter')">Join inner circle</button>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="comparison">
+    <div class="comparison-title">Compare everything</div>
+    <div class="comparison-sub">Every feature, every tier — side by side</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="width:36%">Feature</th>
+          <th>Free</th>
+          <th>Pupil</th>
+          <th class="featured-col">Confidante</th>
+          <th>Daughter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="5">Core</td></tr>
+        <tr>
+          <td>Daily Letter</td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Chat messages</td>
+          <td><span class="limit-text">20/day</span></td>
+          <td><span class="limit-text">100/day</span></td>
+          <td class="featured-col"><span style="color:var(--gold)">Unlimited</span></td>
+          <td><span style="color:var(--gold)">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>Mood check-in</td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr class="section-row"><td colspan="5">Voice</td></tr>
+        <tr>
+          <td>Voice journal</td>
+          <td><span class="dash">—</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Voice replies</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Deep Voice Sessions</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Live voice calls</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><span class="limit-text">30 min/week</span></td>
+          <td><span style="color:var(--gold)">Unlimited</span></td>
+        </tr>
+        <tr class="section-row"><td colspan="5">Content</td></tr>
+        <tr>
+          <td>Podcast episodes</td>
+          <td><span class="limit-text">3 episodes</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Podcast notes & bookmarks</td>
+          <td><span class="dash">—</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Weekly Mirror</td>
+          <td><span class="dash">—</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr class="section-row"><td colspan="5">Premium features</td></tr>
+        <tr>
+          <td>Style Studio</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Decode Him</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><span class="limit-text">10/month</span></td>
+          <td><span style="color:var(--gold)">Unlimited</span></td>
+        </tr>
+        <tr>
+          <td>Memory Vault</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>The Salon community</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><span class="dash">—</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+        <tr>
+          <td>Monthly personal audio letter</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td class="featured-col"><span class="dash">—</span></td>
+          <td><svg class="check" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-title">Questions</div>
+    <div class="faq-sub">Everything you might wonder about before joining</div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        Can I cancel anytime?
+        <svg class="faq-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="faq-a">Yes, always. No questions asked, no guilt from Madame. You can cancel from your account settings at any time. Your access continues until the end of the billing period.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        Is Madame Richi a real person?
+        <svg class="faq-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="faq-a">Madame Richi is a carefully crafted AI persona — not a human, but not a generic chatbot either. Her voice, her stories, and her wisdom are built from real feminine wisdom, psychology, and a deep understanding of love. She will always tell you honestly when you ask if she is AI.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        Is my conversation private?
+        <svg class="faq-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="faq-a">Your conversations are encrypted and private. We do not read them, sell them, or use them for advertising. Your story belongs to you.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        What is the difference between the Confidante and Daughter tiers?
+        <svg class="faq-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="faq-a">Confidante gives you full access to everything Madame offers. Daughter adds unlimited voice calls (vs 30 min/week), priority response in busy periods, unlimited Decode Him, a monthly personal audio letter from Madame written about you, and access to The Salon — a private community of women in the inner circle.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">
+        Can I switch between plans?
+        <svg class="faq-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="faq-a">Yes. Upgrade anytime — your new features activate immediately. Downgrade at the end of your billing cycle. Your conversation history and memories are always preserved regardless of plan.</div>
+    </div>
+  </div>
+
+  <!-- CTA BOTTOM -->
+  <div class="cta-bottom">
+    <h3>Begin with Madame today.</h3>
+    <p>Free forever. Upgrade only when you are ready.</p>
+    <button class="cta-bottom-btn">Start for free</button>
+    <div class="cta-disclaimer">
+      Madame Richi is an AI character. For educational and emotional support purposes only.
+      Not a substitute for professional therapy or medical advice.
+    </div>
+  </div>
+
+</div>
+
+<script>
+let annual = false
+
+function toggleBilling() {
+  annual = !annual
+  document.getElementById('billing-toggle').classList.toggle('annual', annual)
+  document.getElementById('monthly-label').classList.toggle('active', !annual)
+  document.getElementById('annual-label').classList.toggle('active', annual)
+
+  const prices = {pupil:[19,15],conf:[49,39],daught:[199,159]}
+  const savings = {pupil:'$48/year saved',conf:'$120/year saved',daught:'$480/year saved'}
+  const keys = ['pupil','conf','daught']
+  const ids = ['pupil-price','conf-price','daught-price']
+  const noteIds = ['pupil-note','conf-note','daught-note']
+
+  keys.forEach((k,i) => {
+    const price = annual ? prices[k][1] : prices[k][0]
+    document.getElementById(ids[i]).textContent = '$' + price
+    document.getElementById(noteIds[i]).textContent = annual ? savings[k] : ' '
+  })
+}
+
+function select(tier) {
+  // In real app: redirect to checkout
+  const names = {pupil:'The Pupil',confidante:'The Confidante',daughter:'The Daughter'}
+  alert('Redirecting to checkout for ' + names[tier] + '...')
+}
+
+function toggleFaq(item) {
+  const wasOpen = item.classList.contains('open')
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'))
+  if (!wasOpen) item.classList.add('open')
+}
+</script>
+</body>
+</html>

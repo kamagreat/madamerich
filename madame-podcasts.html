@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Podcasts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F4;--bg2:#FAF3EE;--bg3:#F5EDE6;
+  --rose:#E8C4B8;--rose-deep:#C9907C;--rose-dark:#8B5A4A;
+  --gold:#C4965A;--gold-light:#F0DEC8;
+  --dark:#2C1F1A;--dark2:#4A3228;--muted:#9B8078;
+  --border:rgba(196,150,90,0.18);--border2:rgba(196,150,90,0.32);
+  --shadow:0 2px 24px rgba(44,31,26,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);height:100vh;display:flex;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:var(--dark);display:flex;flex-direction:column;padding:28px 0;height:100vh}
+.logo{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
+.nav-section{padding:16px 12px 8px;font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.2);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;margin:1px 8px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.5);transition:all .18s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(196,150,90,.15);color:var(--gold)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:16px 16px 0;border-top:1px solid rgba(255,255,255,.06)}
+.tier-badge{background:rgba(196,150,90,.12);border:1px solid rgba(196,150,90,.25);border-radius:8px;padding:12px 14px}
+.tier-name{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:2px}
+.tier-sub{font-size:11px;color:rgba(255,255,255,.3)}
+.upgrade-btn{display:block;margin-top:10px;background:var(--gold);color:#fff;border:none;border-radius:7px;padding:9px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:opacity .15s}
+.upgrade-btn:hover{opacity:.88}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+
+/* TOP PLAYER */
+.player{
+  background:var(--dark);padding:20px 28px;
+  display:flex;align-items:center;gap:24px;flex-shrink:0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.player-cover{
+  width:56px;height:56px;border-radius:10px;
+  background:linear-gradient(135deg,#3A2820 0%,var(--dark2) 100%);
+  border:1px solid rgba(196,150,90,.2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.player-cover svg{width:22px;height:22px;color:var(--gold);opacity:.7}
+.player-info{flex:1;min-width:0}
+.player-series{font-size:10px;letter-spacing:.16em;color:rgba(196,150,90,.6);text-transform:uppercase;margin-bottom:4px}
+.player-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#F5F0E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px}
+.player-progress{display:flex;align-items:center;gap:10px}
+.progress-time{font-size:11px;color:rgba(255,255,255,.35);min-width:32px}
+.progress-track{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;cursor:pointer;position:relative}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .5s linear;width:35%}
+.progress-handle{position:absolute;top:50%;right:calc(65% - 6px);transform:translateY(-50%);width:12px;height:12px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity .2s}
+.progress-track:hover .progress-handle{opacity:1}
+.player-controls{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.ctrl-btn{background:transparent;border:none;cursor:pointer;color:rgba(255,255,255,.5);padding:4px;transition:color .15s;display:flex;align-items:center}
+.ctrl-btn:hover{color:rgba(255,255,255,.9)}
+.ctrl-btn svg{width:18px;height:18px}
+.play-btn{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--gold);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s;
+}
+.play-btn:hover{opacity:.88}
+.play-btn svg{width:18px;height:18px;color:#fff}
+.player-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.vol-wrap{display:flex;align-items:center;gap:7px}
+.vol-wrap svg{width:15px;height:15px;color:rgba(255,255,255,.4)}
+.vol-slider{width:70px;accent-color:var(--gold)}
+.note-quick-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 13px;border-radius:8px;
+  border:1px solid rgba(196,150,90,.25);background:rgba(196,150,90,.08);
+  color:var(--gold);font-size:12px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .15s;
+}
+.note-quick-btn:hover{background:rgba(196,150,90,.15)}
+
+/* CONTENT AREA */
+.content{flex:1;display:flex;overflow:hidden}
+
+/* LIBRARY */
+.library{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
+
+.lib-header{padding:18px 24px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.lib-tabs{display:flex;gap:4px}
+.lib-tab{
+  padding:7px 14px;border-radius:20px;font-size:12px;
+  cursor:pointer;color:var(--muted);transition:all .15s;border:1px solid transparent;
+}
+.lib-tab:hover{color:var(--dark);background:var(--bg3)}
+.lib-tab.active{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+
+.lib-scroll{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:8px}
+.lib-scroll::-webkit-scrollbar{width:3px}
+.lib-scroll::-webkit-scrollbar-thumb{background:rgba(196,150,90,.2);border-radius:2px}
+.pagination{display:flex;align-items:center;justify-content:center;gap:4px;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+.page-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'DM Sans',sans-serif}
+.page-btn:hover{border-color:var(--border2);color:var(--dark);background:var(--bg3)}
+.page-btn.active{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+.page-btn.arrow{color:var(--muted)}
+.page-btn.arrow:disabled{opacity:.3;cursor:default}
+
+/* Series header */
+.series-header{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;background:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  cursor:pointer;transition:all .18s;margin-bottom:4px;
+}
+.series-header:hover{border-color:var(--border2)}
+.series-header.expanded{border-color:var(--gold);background:var(--gold-light)}
+.series-icon{width:42px;height:42px;border-radius:8px;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.series-icon svg{width:18px;height:18px;color:var(--gold)}
+.series-name{font-size:14px;font-weight:500;color:var(--dark)}
+.series-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.series-arrow{margin-left:auto;color:var(--muted);transition:transform .2s}
+.series-header.expanded .series-arrow{transform:rotate(180deg)}
+.lock-badge{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--muted);margin-left:auto}
+.free-badge{background:rgba(196,150,90,.1);border:1px solid rgba(196,150,90,.2);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--gold)}
+
+/* Episode rows */
+.episodes-list{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;padding-left:12px}
+.episode-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:10px;
+  cursor:pointer;transition:all .15s;
+  border:1px solid transparent;
+}
+.episode-row:hover{background:var(--bg2);border-color:var(--border)}
+.episode-row.playing{background:var(--gold-light);border-color:var(--border2)}
+.episode-row.locked{opacity:.5;cursor:default}
+.ep-num{width:24px;height:24px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);flex-shrink:0}
+.episode-row.playing .ep-num{background:var(--gold);color:#fff}
+.ep-info{flex:1;min-width:0}
+.ep-title{font-size:13px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.episode-row.playing .ep-title{color:var(--gold);font-weight:500}
+.ep-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.ep-duration{font-size:11px;color:var(--muted);flex-shrink:0}
+.ep-play{width:28px;height:28px;border-radius:50%;background:var(--dark);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;opacity:0;transition:opacity .15s}
+.episode-row:hover .ep-play{opacity:1}
+.episode-row.playing .ep-play{opacity:1;background:var(--gold)}
+.ep-play svg{width:11px;height:11px;color:#fff}
+
+/* NOTES PANEL */
+.notes-panel{width:300px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
+.notes-header{padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.notes-title{font-size:13px;font-weight:500;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.notes-tabs{display:flex;gap:4px}
+.notes-tab{padding:5px 12px;border-radius:12px;font-size:11px;cursor:pointer;color:var(--muted);transition:all .15s}
+.notes-tab.active{background:var(--dark);color:var(--gold)}
+
+.notes-scroll{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.notes-scroll::-webkit-scrollbar{width:3px}
+.notes-scroll::-webkit-scrollbar-thumb{background:rgba(196,150,90,.2);border-radius:2px}
+
+/* Add note input */
+.note-input-wrap{padding:14px 16px;border-top:1px solid var(--border);flex-shrink:0}
+.note-ep-context{font-size:11px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.note-ep-context span{color:var(--gold)}
+.note-textarea{
+  width:100%;background:#fff;border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;
+  color:var(--dark);resize:none;outline:none;line-height:1.5;height:72px;
+  transition:border-color .2s;
+}
+.note-textarea:focus{border-color:var(--border2)}
+.note-textarea::placeholder{color:var(--muted)}
+.note-add-btn{
+  margin-top:8px;width:100%;background:var(--dark);color:var(--gold);
+  border:none;border-radius:7px;padding:9px;font-size:12px;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s;
+}
+.note-add-btn:hover{opacity:.85}
+
+/* Note cards */
+.note-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;transition:border-color .15s}
+.note-card:hover{border-color:var(--border2)}
+.note-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.note-episode-ref{font-size:10px;color:var(--gold);letter-spacing:.06em}
+.note-timestamp{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.note-timestamp svg{width:10px;height:10px}
+.note-text{font-size:13px;color:var(--dark2);line-height:1.6}
+.note-timecode{display:inline-flex;align-items:center;gap:4px;background:var(--bg3);border-radius:4px;padding:2px 7px;font-size:11px;color:var(--muted);margin-top:8px;cursor:pointer;transition:background .15s}
+.note-timecode:hover{background:var(--gold-light);color:var(--gold)}
+.note-delete{width:22px;height:22px;border-radius:4px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;opacity:0}
+.note-card:hover .note-delete{opacity:1}
+.note-delete:hover{background:var(--bg3);color:var(--rose-dark)}
+
+/* Bookmark notification */
+.bookmark-toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--dark);color:var(--gold);
+  padding:10px 18px;border-radius:10px;
+  font-size:13px;border:1px solid rgba(196,150,90,.3);
+  transform:translateY(20px);opacity:0;
+  transition:all .3s;pointer-events:none;z-index:200;
+  display:flex;align-items:center;gap:8px;
+}
+.bookmark-toast.show{transform:translateY(0);opacity:1}
+
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.episode-row{animation:fadein .25s ease both}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Madame Richi</div>
+    <div class="logo-sub">Private sanctuary</div>
+  </div>
+  <div class="nav-section">Main</div>
+  <a class="nav-item" href="madame-dashboard.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Dashboard
+  </a>
+  <a class="nav-item" href="madame-chat.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Chat with Madame
+  </a>
+  <a class="nav-item active" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    Podcasts
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    Style Studio
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    Decode Him
+  </a>
+  <div class="sidebar-bottom">
+    <div class="tier-badge">
+      <div class="tier-name">Free plan</div>
+      <div class="tier-sub">3 episodes available</div>
+      <button class="upgrade-btn">Unlock all series →</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PLAYER -->
+  <div class="player">
+    <div class="player-cover">
+      <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    </div>
+    <div class="player-info">
+      <div class="player-series">Letters from Monaco · Ep. 1</div>
+      <div class="player-title">The morning I understood solitude</div>
+      <div class="player-progress">
+        <span class="progress-time" id="cur-time">2:27</span>
+        <div class="progress-track" onclick="seekTo(event)">
+          <div class="progress-fill" id="prog-fill"></div>
+          <div class="progress-handle" id="prog-handle"></div>
+        </div>
+        <span class="progress-time" style="text-align:right">7:00</span>
+      </div>
+    </div>
+    <div class="player-controls">
+      <button class="ctrl-btn" onclick="skip(-15)" title="Back 15s">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
+      </button>
+      <button class="play-btn" id="play-btn" onclick="togglePlay()">
+        <svg id="play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="ctrl-btn" onclick="skip(15)" title="Forward 15s">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"/></svg>
+      </button>
+    </div>
+    <div class="player-right">
+      <div class="vol-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072M6.343 9.343a8 8 0 000 5.314"/></svg>
+        <input type="range" class="vol-slider" min="0" max="100" value="75">
+      </div>
+      <button class="note-quick-btn" onclick="quickNote()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Bookmark moment
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- LIBRARY -->
+    <div class="library">
+      <div class="lib-header">
+        <div class="lib-tabs">
+          <div class="lib-tab active" onclick="switchTab(this,'all')">All series</div>
+          <div class="lib-tab" onclick="switchTab(this,'free')">Free</div>
+          <div class="lib-tab" onclick="switchTab(this,'saved')">Saved</div>
+          <div class="lib-tab" onclick="switchTab(this,'history')">History</div>
+        </div>
+      </div>
+      <div class="lib-scroll">
+
+        <!-- Series 1 -->
+        <div>
+          <div class="series-header expanded" id="sh1" onclick="toggleSeries('s1','sh1')">
+            <div class="series-icon"><svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+            <div>
+              <div class="series-name">Letters from Monaco</div>
+              <div class="series-meta">12 episodes · Philosophical letters</div>
+            </div>
+            <div class="free-badge">Free</div>
+            <svg class="series-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="episodes-list" id="s1">
+            <div class="episode-row playing" onclick="playEpisode(this,'Letters from Monaco · Ep. 1','The morning I understood solitude','7:00')">
+              <div class="ep-num">1</div>
+              <div class="ep-info">
+                <div class="ep-title">The morning I understood solitude</div>
+                <div class="ep-meta">May 10 · Played</div>
+              </div>
+              <div class="ep-duration">7 min</div>
+              <button class="ep-play"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+            </div>
+            <div class="episode-row" onclick="playEpisode(this,'Letters from Monaco · Ep. 2','Why I stopped explaining myself','6:30')">
+              <div class="ep-num">2</div>
+              <div class="ep-info">
+                <div class="ep-title">Why I stopped explaining myself</div>
+                <div class="ep-meta">May 12</div>
+              </div>
+              <div class="ep-duration">6 min</div>
+              <button class="ep-play"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            </div>
+            <div class="episode-row" onclick="playEpisode(this,'Letters from Monaco · Ep. 3','The difference between patience and fear','8:15')">
+              <div class="ep-num">3</div>
+              <div class="ep-info">
+                <div class="ep-title">The difference between patience and fear</div>
+                <div class="ep-meta">May 14</div>
+              </div>
+              <div class="ep-duration">8 min</div>
+              <button class="ep-play"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            </div>
+            <div class="episode-row locked">
+              <div class="ep-num">4</div>
+              <div class="ep-info">
+                <div class="ep-title">What desire actually needs to survive</div>
+                <div class="ep-meta">May 16 · Requires Pupil</div>
+              </div>
+              <div class="ep-duration">9 min</div>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Series 2 -->
+        <div>
+          <div class="series-header" id="sh2" onclick="toggleSeries('s2','sh2')">
+            <div class="series-icon"><svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+            <div>
+              <div class="series-name">The Four Husbands</div>
+              <div class="series-meta">4 episodes · Each marriage, each lesson</div>
+            </div>
+            <div class="lock-badge">$19+</div>
+            <svg class="series-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="episodes-list" id="s2" style="display:none">
+            <div class="episode-row locked">
+              <div class="ep-num">1</div>
+              <div class="ep-info"><div class="ep-title">The Poet — passion without direction</div><div class="ep-meta">15 min</div></div>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+            <div class="episode-row locked">
+              <div class="ep-num">2</div>
+              <div class="ep-info"><div class="ep-title">The Banker — security is not love</div><div class="ep-meta">14 min</div></div>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Series 3 -->
+        <div>
+          <div class="series-header" id="sh3" onclick="toggleSeries('s3','sh3')">
+            <div class="series-icon"><svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
+            <div>
+              <div class="series-name">Decoded</div>
+              <div class="series-meta">8 episodes · Understanding men</div>
+            </div>
+            <div class="lock-badge">$49+</div>
+            <svg class="series-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="episodes-list" id="s3" style="display:none"></div>
+        </div>
+
+        <!-- Series 4 -->
+        <div>
+          <div class="series-header" id="sh4" onclick="toggleSeries('s4','sh4')">
+            <div class="series-icon"><svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707"/></svg></div>
+            <div>
+              <div class="series-name">After He Left</div>
+              <div class="series-meta">7 episodes · Post-divorce recovery</div>
+            </div>
+            <div class="lock-badge">$19+</div>
+            <svg class="series-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="episodes-list" id="s4" style="display:none"></div>
+        </div>
+
+        <!-- Series 5 -->
+        <div>
+          <div class="series-header" id="sh5" onclick="toggleSeries('s5','sh5')">
+            <div class="series-icon"><svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg></div>
+            <div>
+              <div class="series-name">Whispers</div>
+              <div class="series-meta">Daily · 2-3 min · Morning & evening</div>
+            </div>
+            <div class="free-badge">Free</div>
+            <svg class="series-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="episodes-list" id="s5" style="display:none">
+            <div class="episode-row" onclick="playEpisode(this,'Whispers','Sunday morning — let this week begin gently','3:10')">
+              <div class="ep-num">•</div>
+              <div class="ep-info"><div class="ep-title">Sunday morning — let this week begin gently</div><div class="ep-meta">Today · New</div></div>
+              <div class="ep-duration">3 min</div>
+              <button class="ep-play"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page-btn arrow" disabled>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="page-btn active" onclick="goPage(this,1)">1</button>
+        <button class="page-btn" onclick="goPage(this,2)">2</button>
+        <button class="page-btn" onclick="goPage(this,3)">3</button>
+        <span style="font-size:12px;color:var(--muted);padding:0 4px">...</span>
+        <button class="page-btn" onclick="goPage(this,8)">8</button>
+        <button class="page-btn arrow" onclick="goPage(document.querySelector('.page-btn.active'),parseInt(document.querySelector('.page-btn.active').textContent)+1)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- NOTES PANEL -->
+    <div class="notes-panel">
+      <div class="notes-header">
+        <div class="notes-title">
+          My Notes
+          <span style="font-size:11px;color:var(--muted);font-weight:400">3 notes</span>
+        </div>
+        <div class="notes-tabs">
+          <div class="notes-tab active" onclick="switchNoteTab(this,'episode')">This episode</div>
+          <div class="notes-tab" onclick="switchNoteTab(this,'all')">All notes</div>
+        </div>
+      </div>
+
+      <div class="notes-scroll" id="notes-list">
+
+        <div class="note-card" id="nc1">
+          <div class="note-card-header">
+            <div class="note-episode-ref">Letters from Monaco · Ep. 1</div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <button class="note-delete" onclick="deleteNote('nc1')">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="note-text">Solitude as a choice vs loneliness as a consequence. This distinction is everything.</div>
+          <div class="note-timecode" onclick="jumpTo('1:42')">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+            1:42 — jump to moment
+          </div>
+        </div>
+
+        <div class="note-card" id="nc2">
+          <div class="note-card-header">
+            <div class="note-episode-ref">Letters from Monaco · Ep. 1</div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <button class="note-delete" onclick="deleteNote('nc2')">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="note-text">"The sea at 6am belongs only to those willing to be awake for it." — ask myself what I'm willing to wake up for.</div>
+          <div class="note-timecode" onclick="jumpTo('3:15')">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+            3:15 — jump to moment
+          </div>
+        </div>
+
+        <div class="note-card" id="nc3">
+          <div class="note-card-header">
+            <div class="note-episode-ref">Letters from Monaco · Ep. 1</div>
+            <button class="note-delete" onclick="deleteNote('nc3')">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+          <div class="note-text">Patience dressed in silk = fear. Need to sit with this one longer.</div>
+          <div class="note-timecode" onclick="jumpTo('5:50')">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+            5:50 — jump to moment
+          </div>
+        </div>
+
+      </div>
+
+      <div class="note-input-wrap">
+        <div class="note-ep-context">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+          At <span id="note-at-time">2:27</span> in Ep. 1
+        </div>
+        <textarea class="note-textarea" id="note-input" placeholder="Write your note here..."></textarea>
+        <button class="note-add-btn" onclick="addNote()">Save note at this moment</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bookmark toast -->
+<div class="bookmark-toast" id="bookmark-toast">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+  Moment bookmarked at <strong id="bm-time">2:27</strong>
+</div>
+
+<script>
+// Player
+let playing = false, progress = 35, totalSec = 420
+const times = ['0:00','0:30','1:00','1:30','2:00','2:27','3:00','3:30','4:00','4:30','5:00','5:30','6:00','6:30','7:00']
+let ti = 5, ticker
+
+function togglePlay() {
+  playing = !playing
+  const icon = document.getElementById('play-icon')
+  icon.innerHTML = playing
+    ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+    : '<path d="M8 5v14l11-7z"/>'
+  if (playing) {
+    ticker = setInterval(() => {
+      progress = Math.min(progress + 0.25, 100)
+      updateProgress()
+      ti = Math.min(ti + 1, times.length - 1)
+      document.getElementById('cur-time').textContent = times[ti]
+      document.getElementById('note-at-time').textContent = times[ti]
+      if (progress >= 100) { playing = false; clearInterval(ticker) }
+    }, 500)
+  } else clearInterval(ticker)
+}
+
+function updateProgress() {
+  document.getElementById('prog-fill').style.width = progress + '%'
+  document.getElementById('prog-handle').style.right = (100 - progress - 1) + '%'
+}
+
+function seekTo(e) {
+  const rect = e.currentTarget.getBoundingClientRect()
+  progress = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100))
+  ti = Math.round(progress / 100 * (times.length - 1))
+  document.getElementById('cur-time').textContent = times[ti]
+  updateProgress()
+}
+
+function skip(sec) {
+  const delta = (sec / totalSec) * 100
+  progress = Math.max(0, Math.min(100, progress + delta))
+  updateProgress()
+}
+
+// Series toggle
+function toggleSeries(listId, headerId) {
+  const list = document.getElementById(listId)
+  const header = document.getElementById(headerId)
+  const open = list.style.display !== 'none'
+  list.style.display = open ? 'none' : 'flex'
+  header.classList.toggle('expanded', !open)
+}
+
+// Play episode
+function playEpisode(row, series, title, duration) {
+  document.querySelectorAll('.episode-row').forEach(r => r.classList.remove('playing'))
+  row.classList.add('playing')
+  row.querySelector('.ep-play svg').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+  document.querySelector('.player-series').textContent = series
+  document.querySelector('.player-title').textContent = title
+  progress = 0; ti = 0; updateProgress()
+  document.getElementById('cur-time').textContent = '0:00'
+  if (!playing) togglePlay()
+}
+
+// Tabs
+function switchTab(el, tab) {
+  document.querySelectorAll('.lib-tab').forEach(t => t.classList.remove('active'))
+  el.classList.add('active')
+}
+
+function switchNoteTab(el, tab) {
+  document.querySelectorAll('.notes-tab').forEach(t => t.classList.remove('active'))
+  el.classList.add('active')
+}
+
+// Notes
+let noteCount = 3
+function addNote() {
+  const inp = document.getElementById('note-input')
+  const text = inp.value.trim()
+  if (!text) return
+  const t = times[ti]
+  const id = 'nc' + (++noteCount)
+  const card = document.createElement('div')
+  card.className = 'note-card'
+  card.id = id
+  card.style.animation = 'fadein .3s ease'
+  card.innerHTML = `
+    <div class="note-card-header">
+      <div class="note-episode-ref">Letters from Monaco · Ep. 1</div>
+      <button class="note-delete" onclick="deleteNote('${id}')">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </button>
+    </div>
+    <div class="note-text">${text}</div>
+    <div class="note-timecode" onclick="jumpTo('${t}')">
+      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+      ${t} — jump to moment
+    </div>`
+  document.getElementById('notes-list').prepend(card)
+  inp.value = ''
+  document.querySelector('.notes-title span').textContent = noteCount + ' notes'
+}
+
+function deleteNote(id) {
+  const card = document.getElementById(id)
+  card.style.opacity = '0'
+  card.style.transform = 'translateX(10px)'
+  card.style.transition = 'all .2s'
+  setTimeout(() => { card.remove(); noteCount--; document.querySelector('.notes-title span').textContent = noteCount + ' notes' }, 200)
+}
+
+function jumpTo(t) {
+  const idx = times.indexOf(t)
+  if (idx >= 0) { ti = idx; progress = (idx / (times.length - 1)) * 100; updateProgress(); document.getElementById('cur-time').textContent = t }
+}
+
+function goPage(el, num) {
+  document.querySelectorAll('.page-btn:not(.arrow)').forEach(b => b.classList.remove('active'))
+  const target = [...document.querySelectorAll('.page-btn:not(.arrow)')].find(b => b.textContent == num)
+  if (target) target.classList.add('active')
+  // In real app: fetch page data. Here just visual feedback.
+}
+
+  const t = times[ti]
+  document.getElementById('note-at-time').textContent = t
+  // Pre-fill timecode as placeholder anchor so note saves with correct time
+  const inp = document.getElementById('note-input')
+  inp.focus()
+  inp.placeholder = 'Write your note at ' + t + '... (or save empty bookmark)'
+  // Save empty bookmark immediately
+  const id = 'nc' + (++noteCount)
+  const card = document.createElement('div')
+  card.className = 'note-card'
+  card.id = id
+  card.style.animation = 'fadein .3s ease'
+  card.innerHTML = `
+    <div class="note-card-header">
+      <div class="note-episode-ref">Letters from Monaco · Ep. 1</div>
+      <button class="note-delete" onclick="deleteNote('${id}')">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </button>
+    </div>
+    <div class="note-text" id="${id}-text" contenteditable="true" style="outline:none;border-bottom:1px dashed var(--border);padding-bottom:4px" data-placeholder="Add your thought..." onblur="if(!this.textContent.trim())this.textContent=''">
+    </div>
+    <div class="note-timecode" onclick="jumpTo('${t}')">
+      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+      ${t} — jump to moment
+    </div>`
+  document.getElementById('notes-list').prepend(card)
+  document.querySelector('.notes-title span').textContent = noteCount + ' notes'
+  // Focus the editable note text
+  setTimeout(() => document.getElementById(id+'-text').focus(), 100)
+  const toast = document.getElementById('bookmark-toast')
+  document.getElementById('bm-time').textContent = t
+  toast.classList.add('show')
+  setTimeout(() => toast.classList.remove('show'), 2500)
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #FDF8F4;
+  --bg2:       #FAF3EE;
+  --bg3:       #F5EDE6;
+  --rose:      #E8C4B8;
+  --rose-deep: #C9907C;
+  --rose-dark: #8B5A4A;
+  --gold:      #C4965A;
+  --gold-light:#F0DEC8;
+  --dark:      #2C1F1A;
+  --dark2:     #4A3228;
+  --muted:     #9B8078;
+  --border:    rgba(196,150,90,0.18);
+  --border2:   rgba(196,150,90,0.32);
+  --shadow:    0 2px 24px rgba(44,31,26,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;display:flex}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:240px;flex-shrink:0;
+  background:var(--dark);
+  display:flex;flex-direction:column;
+  padding:28px 0;
+  position:sticky;top:0;height:100vh;
+}
+.logo{
+  padding:0 24px 28px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  margin-bottom:8px;
+}
+.logo-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;letter-spacing:.12em;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px;letter-spacing:.04em}
+
+.nav-section{padding:16px 12px 8px;font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.2);text-transform:uppercase}
+.nav-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 20px;margin:1px 8px;
+  border-radius:8px;cursor:pointer;
+  font-size:13px;color:rgba(255,255,255,.5);
+  transition:all .18s;text-decoration:none;
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(196,150,90,.15);color:var(--gold)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+
+.sidebar-bottom{margin-top:auto;padding:16px 16px 0;border-top:1px solid rgba(255,255,255,.06)}
+.tier-badge{
+  background:rgba(196,150,90,.12);border:1px solid rgba(196,150,90,.25);
+  border-radius:8px;padding:12px 14px;
+}
+.tier-name{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:2px}
+.tier-sub{font-size:11px;color:rgba(255,255,255,.3)}
+.upgrade-btn{
+  display:block;margin-top:10px;
+  background:var(--gold);color:#fff;
+  border:none;border-radius:7px;padding:9px;
+  font-size:12px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;width:100%;letter-spacing:.03em;
+  transition:opacity .15s;
+}
+.upgrade-btn:hover{opacity:.88}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+
+.topbar{
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  position:sticky;top:0;z-index:10;
+}
+.topbar-left h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;color:var(--dark);
+}
+.topbar-left p{font-size:12px;color:var(--muted);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--rose);display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--rose-dark);font-weight:500;
+  cursor:pointer;
+}
+.notif-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--bg2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;
+}
+.notif-btn:hover{background:var(--bg3)}
+
+.content{
+  flex:1;display:grid;
+  grid-template-columns:1fr 280px;
+  gap:0;
+}
+
+/* ── CENTER ── */
+.center{padding:28px 32px;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--border)}
+
+.greeting{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:24px 26px;
+  background:linear-gradient(135deg,var(--bg3) 0%,#F7EAE4 100%);
+  border-radius:16px;border:1px solid var(--border);
+}
+.greeting-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:400;color:var(--dark);margin-bottom:4px;
+}
+.greeting-text p{font-size:13px;color:var(--muted);line-height:1.6}
+.greeting-badge{
+  background:var(--gold-light);border:1px solid var(--border2);
+  border-radius:20px;padding:5px 12px;
+  font-size:11px;color:var(--gold);letter-spacing:.05em;
+  white-space:nowrap;
+}
+
+/* Daily Letter */
+.letter-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+}
+.card-label{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:16px;
+}
+.card-label-dot{width:3px;height:18px;background:var(--gold);border-radius:0}
+.card-label-text{font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.card-label-date{margin-left:auto;font-size:11px;color:var(--muted)}
+
+.letter-body{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-style:italic;
+  color:var(--dark2);line-height:1.9;
+  margin-bottom:18px;
+}
+.letter-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:14px;border-top:1px solid var(--border);
+}
+.letter-sign{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;color:var(--gold);
+}
+.audio-btn{
+  display:flex;align-items:center;gap:7px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:20px;padding:7px 14px;
+  font-size:12px;color:var(--muted);cursor:pointer;
+  transition:all .15s;
+}
+.audio-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--rose-dark)}
+.audio-btn svg{width:13px;height:13px}
+
+/* Mood */
+.mood-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:16px;padding:20px 24px;
+}
+.mood-title{font-size:13px;color:var(--muted);margin-bottom:14px}
+.mood-options{display:flex;gap:8px}
+.mood-opt{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:10px 6px;border-radius:10px;
+  border:1px solid var(--border);
+  cursor:pointer;transition:all .18s;
+  background:var(--bg2);
+}
+.mood-opt:hover{border-color:var(--rose);background:rgba(232,196,184,.12)}
+.mood-opt.selected{border-color:var(--gold);background:var(--gold-light)}
+.mood-dot{width:10px;height:10px;border-radius:50%}
+.mood-label{font-size:11px;color:var(--muted)}
+.mood-opt.selected .mood-label{color:var(--gold)}
+.mood-response{
+  margin-top:12px;font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-style:italic;color:var(--rose-deep);
+  min-height:20px;transition:opacity .3s;
+}
+
+/* Quick actions */
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:14px;padding:18px;cursor:pointer;
+  transition:all .18s;display:flex;flex-direction:column;gap:10px;
+  text-decoration:none;
+}
+.action-card:hover{border-color:var(--rose);transform:translateY(-1px);box-shadow:var(--shadow)}
+.action-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--bg3);display:flex;align-items:center;justify-content:center;
+}
+.action-icon svg{width:17px;height:17px;color:var(--gold)}
+.action-title{font-size:13px;font-weight:500;color:var(--dark)}
+.action-sub{font-size:11px;color:var(--muted)}
+
+/* ── RIGHT PANEL ── */
+.right{padding:24px 24px;display:flex;flex-direction:column;gap:20px;background:var(--bg2)}
+
+.panel-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:14px;padding:18px;
+}
+.panel-title{font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+
+/* Week tracker */
+.week-row{display:flex;gap:6px;justify-content:space-between}
+.week-day{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  flex:1;
+}
+.week-day-label{font-size:10px;color:var(--muted)}
+.week-day-dot{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--muted);
+}
+.week-day-dot.done{background:var(--rose);border-color:var(--rose);color:var(--rose-dark)}
+.week-day-dot.today{border-color:var(--gold);color:var(--gold);background:var(--gold-light)}
+
+/* Streak */
+.streak-row{display:flex;align-items:center;gap:12px}
+.streak-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;color:var(--gold);line-height:1;
+}
+.streak-info p:first-child{font-size:13px;font-weight:500;color:var(--dark)}
+.streak-info p:last-child{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Upcoming */
+.upcoming-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.upcoming-item:last-child{border-bottom:none;padding-bottom:0}
+.upcoming-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--rose-deep);margin-top:5px;flex-shrink:0;
+}
+.upcoming-title{font-size:12px;font-weight:500;color:var(--dark);line-height:1.4}
+.upcoming-meta{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Memories */
+.memory-item{
+  padding:10px 12px;background:var(--bg2);border-radius:8px;
+  font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;
+  color:var(--dark2);line-height:1.6;margin-bottom:7px;
+  border-left:2px solid var(--rose);
+}
+.memory-item:last-child{margin-bottom:0}
+
+/* Animations */
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.center>*{animation:fadein .4s ease both}
+.center>*:nth-child(1){animation-delay:.05s}
+.center>*:nth-child(2){animation-delay:.12s}
+.center>*:nth-child(3){animation-delay:.2s}
+.center>*:nth-child(4){animation-delay:.28s}
+.right>*{animation:fadein .4s ease both}
+.right>*:nth-child(1){animation-delay:.1s}
+.right>*:nth-child(2){animation-delay:.18s}
+.right>*:nth-child(3){animation-delay:.26s}
+.right>*:nth-child(4){animation-delay:.34s}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Madame Richi</div>
+    <div class="logo-sub">Private sanctuary</div>
+  </div>
+
+  <div class="nav-section">Main</div>
+
+  <a class="nav-item active" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Dashboard
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Chat with Madame
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    Podcasts
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    Style Studio
+  </a>
+  <a class="nav-item" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    Decode Him
+  </a>
+
+  <div class="sidebar-bottom">
+    <div class="tier-badge">
+      <div class="tier-name">Free plan</div>
+      <div class="tier-sub">20 messages remaining today</div>
+      <button class="upgrade-btn">Upgrade to Pupil →</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Good evening, Elena</h1>
+      <p>Sunday, May 17 · Monaco is warm tonight</p>
+    </div>
+    <div class="topbar-right">
+      <div class="notif-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      </div>
+      <div class="avatar">E</div>
+    </div>
+  </div>
+
+  <!-- Content grid -->
+  <div class="content">
+
+    <!-- CENTER -->
+    <div class="center">
+
+      <!-- Greeting -->
+      <div class="greeting">
+        <div class="greeting-text">
+          <h2>Madame is thinking of you today.</h2>
+          <p>You have been here 12 days. Something is shifting — she can feel it.</p>
+        </div>
+        <div class="greeting-badge">Day 12 ✦</div>
+      </div>
+
+      <!-- Daily Letter -->
+      <div class="letter-card">
+        <div class="card-label">
+          <div class="card-label-dot"></div>
+          <div class="card-label-text">Madame's letter — today</div>
+          <div class="card-label-date">May 17, 2026</div>
+        </div>
+        <div class="letter-body">
+          Monaco, 7am. The sea is the colour of old silver this morning,
+          and everyone is still sleeping.<br><br>
+          I have been thinking about waiting — and what we tell ourselves
+          while we do it. My second husband made me wait for everything.
+          His attention, his presence, his love. I thought patience was
+          virtue. It was not. It was fear dressed in silk.<br><br>
+          What are you waiting for that you already know the answer to,
+          ma chérie?
+        </div>
+        <div class="letter-footer">
+          <div class="letter-sign">Yours, Madame</div>
+          <button class="audio-btn" onclick="this.innerHTML='<svg fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' viewBox=\'0 0 24 24\' width=\'13\' height=\'13\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z\'/></svg> Pause\'">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Hear her voice
+          </button>
+        </div>
+      </div>
+
+      <!-- Mood -->
+      <div class="mood-card">
+        <div class="mood-title">How are you feeling today?</div>
+        <div class="mood-options">
+          <div class="mood-opt" onclick="selectMood(this,'Heavy','Madame hears you. This too is information.')">
+            <div class="mood-dot" style="background:#9B7070"></div>
+            <div class="mood-label">Heavy</div>
+          </div>
+          <div class="mood-opt" onclick="selectMood(this,'Low','Something is asking for your attention.')">
+            <div class="mood-dot" style="background:#B89070"></div>
+            <div class="mood-label">Low</div>
+          </div>
+          <div class="mood-opt" onclick="selectMood(this,'Steady','Steady is its own kind of strength.')">
+            <div class="mood-dot" style="background:#8A9B80"></div>
+            <div class="mood-label">Steady</div>
+          </div>
+          <div class="mood-opt" onclick="selectMood(this,'Light','Hold on to this feeling, ma chérie.')">
+            <div class="mood-dot" style="background:#7A9B90"></div>
+            <div class="mood-label">Light</div>
+          </div>
+          <div class="mood-opt" onclick="selectMood(this,'Radiant','Radiant looks beautiful on you.')">
+            <div class="mood-dot" style="background:#C4965A"></div>
+            <div class="mood-label">Radiant</div>
+          </div>
+        </div>
+        <div class="mood-response" id="mood-resp"></div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="actions-grid">
+        <a class="action-card" href="#">
+          <div class="action-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </div>
+          <div>
+            <div class="action-title">Talk to Madame</div>
+            <div class="action-sub">She is present</div>
+          </div>
+        </a>
+        <a class="action-card" href="#">
+          <div class="action-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+          </div>
+          <div>
+            <div class="action-title">Podcast library</div>
+            <div class="action-sub">5 series · 32 episodes</div>
+          </div>
+        </a>
+        <a class="action-card" href="#">
+          <div class="action-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          <div>
+            <div class="action-title">Style Studio</div>
+            <div class="action-sub">Upload an outfit</div>
+          </div>
+        </a>
+        <a class="action-card" href="#">
+          <div class="action-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </div>
+          <div>
+            <div class="action-title">Decode Him</div>
+            <div class="action-sub">Analyse a message</div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right">
+
+      <!-- Week tracker -->
+      <div class="panel-card">
+        <div class="panel-title">This week</div>
+        <div class="week-row">
+          <div class="week-day">
+            <div class="week-day-label">M</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">T</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">W</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">T</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">F</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">S</div>
+            <div class="week-day-dot done">✓</div>
+          </div>
+          <div class="week-day">
+            <div class="week-day-label">S</div>
+            <div class="week-day-dot today">•</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak -->
+      <div class="panel-card">
+        <div class="panel-title">Current streak</div>
+        <div class="streak-row">
+          <div class="streak-num">12</div>
+          <div class="streak-info">
+            <p>Days with Madame</p>
+            <p>Best: 12 days · Keep going</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming -->
+      <div class="panel-card">
+        <div class="panel-title">Up next</div>
+        <div class="upcoming-item">
+          <div class="upcoming-dot"></div>
+          <div>
+            <div class="upcoming-title">Ep. 3 — The morning I chose myself</div>
+            <div class="upcoming-meta">Letters from Monaco · 8 min</div>
+          </div>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-dot"></div>
+          <div>
+            <div class="upcoming-title">Weekly Mirror</div>
+            <div class="upcoming-meta">Madame reviews your week · Tomorrow</div>
+          </div>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-dot"></div>
+          <div>
+            <div class="upcoming-title">Sunday ritual</div>
+            <div class="upcoming-meta">5-min reflection prompt · Today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Madame remembers -->
+      <div class="panel-card">
+        <div class="panel-title">Madame remembers</div>
+        <div class="memory-item">"Her ex left 4 months ago after 3 years together"</div>
+        <div class="memory-item">"She wants to feel desired again"</div>
+        <div class="memory-item">"Pattern: choosing unavailable men"</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function selectMood(el, label, msg) {
+  document.querySelectorAll('.mood-opt').forEach(o => o.classList.remove('selected'))
+  el.classList.add('selected')
+  const r = document.getElementById('mood-resp')
+  r.style.opacity = 0
+  setTimeout(() => { r.textContent = msg; r.style.opacity = 1 }, 200)
+}
+</script>
+</body>
+</html>

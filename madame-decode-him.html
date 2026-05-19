@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Decode Him</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F4;--bg2:#FAF3EE;--bg3:#F5EDE6;
+  --rose:#E8C4B8;--rose-deep:#C9907C;--rose-dark:#8B5A4A;
+  --gold:#C4965A;--gold-light:#F0DEC8;
+  --dark:#2C1F1A;--dark2:#4A3228;--muted:#9B8078;
+  --border:rgba(196,150,90,0.18);--border2:rgba(196,150,90,0.32);
+  --shadow:0 2px 24px rgba(44,31,26,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);height:100vh;display:flex;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:var(--dark);display:flex;flex-direction:column;padding:28px 0;height:100vh}
+.logo{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
+.nav-section{padding:16px 12px 8px;font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.2);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;margin:1px 8px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.5);transition:all .18s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(196,150,90,.15);color:var(--gold)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:16px 16px 0;border-top:1px solid rgba(255,255,255,.06)}
+.tier-badge{background:rgba(196,150,90,.12);border:1px solid rgba(196,150,90,.25);border-radius:8px;padding:12px 14px}
+.tier-name{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:2px}
+.tier-sub{font-size:11px;color:rgba(255,255,255,.3)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
+.topbar-left h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
+.topbar-left p{font-size:12px;color:var(--muted);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-badge{background:var(--gold-light);border:1px solid var(--border2);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--gold)}
+.usage-pill{font-size:11px;color:var(--muted);padding:5px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:20px}
+.usage-pill span{color:var(--gold);font-weight:500}
+
+/* CONTENT */
+.content{flex:1;display:grid;grid-template-columns:1fr 320px;overflow:hidden}
+
+/* LEFT */
+.decode-main{padding:24px 32px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.decode-main::-webkit-scrollbar{width:3px}
+.decode-main::-webkit-scrollbar-thumb{background:rgba(196,150,90,.2);border-radius:2px}
+
+/* Input modes */
+.input-modes{display:flex;gap:6px}
+.input-mode{padding:7px 16px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s}
+.input-mode:hover{border-color:var(--gold);color:var(--gold)}
+.input-mode.active{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+
+/* Text input panel */
+.input-panel{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.input-panel-header{padding:16px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.input-panel-title{font-size:13px;font-weight:500;color:var(--dark)}
+.input-panel-hint{font-size:11px;color:var(--muted)}
+
+/* Conversation builder */
+.convo-builder{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.convo-msg{display:flex;gap:10px;align-items:flex-start}
+.convo-who{font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.convo-who.him{background:rgba(44,31,26,.07);color:var(--dark2)}
+.convo-who.you{background:rgba(196,150,90,.12);color:var(--gold)}
+.convo-text{font-size:14px;color:var(--dark2);line-height:1.6;flex:1;padding:8px 12px;border-radius:10px;background:var(--bg2);border:1px solid transparent}
+.convo-text.him-msg{background:var(--bg3)}
+.convo-text.you-msg{background:var(--gold-light);border-color:rgba(196,150,90,.15)}
+.convo-delete{width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;opacity:0;flex-shrink:0}
+.convo-msg:hover .convo-delete{opacity:1}
+.convo-delete:hover{background:var(--bg3);color:var(--rose-dark)}
+
+/* Add message row */
+.add-msg-row{display:flex;gap:8px;padding:14px 20px;border-top:1px solid var(--border);background:var(--bg2)}
+.add-who-toggle{display:flex;gap:4px}
+.who-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--border2);font-size:12px;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;background:transparent;color:var(--muted)}
+.who-btn.active{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+.add-msg-input{flex:1;border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--dark);outline:none;background:#fff;transition:border-color .2s}
+.add-msg-input:focus{border-color:var(--gold)}
+.add-msg-input::placeholder{color:var(--muted)}
+.add-msg-btn{background:var(--dark);border:none;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:opacity .15s}
+.add-msg-btn:hover{opacity:.85}
+
+/* Context note */
+.context-row{padding:12px 20px;border-top:1px solid var(--border)}
+.context-input{width:100%;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--dark);background:transparent;resize:none;height:40px;line-height:1.5}
+.context-input::placeholder{color:var(--muted)}
+.context-label{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+
+/* Decode button */
+.decode-btn{
+  width:100%;padding:14px;border-radius:12px;
+  background:var(--dark);border:none;
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  color:var(--gold);cursor:pointer;letter-spacing:.04em;
+  transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.decode-btn:hover{opacity:.88}
+.decode-btn:disabled{opacity:.4;cursor:default}
+
+/* Decoding animation */
+.decoding-card{background:var(--dark);border-radius:16px;padding:28px;text-align:center;display:none}
+.decoding-card.visible{display:block;animation:fadein .3s ease}
+.decoding-label{font-size:10px;letter-spacing:.2em;color:rgba(196,150,90,.5);text-transform:uppercase;margin-bottom:14px}
+.decoding-dots{display:flex;justify-content:center;gap:7px;margin-bottom:14px}
+.d-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:ddot 1.2s ease-in-out infinite}
+.d-dot:nth-child(2){animation-delay:.2s}
+.d-dot:nth-child(3){animation-delay:.4s}
+@keyframes ddot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.decoding-msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(245,240,232,.6)}
+
+/* RESULT */
+.result-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;display:none}
+.result-card.visible{display:block;animation:fadein .5s ease}
+
+.result-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.madame-avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose) 0%,var(--gold-light) 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--rose-dark);flex-shrink:0}
+.result-header-text h3{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dark)}
+.result-header-text p{font-size:11px;color:var(--muted);margin-top:1px}
+
+.result-body{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
+
+/* Attachment type badge */
+.attachment-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:var(--bg2);border:1px solid var(--border)}
+.attachment-badge{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap}
+.badge-anxious{background:rgba(197,144,124,.15);color:#8B4A3A;border:1px solid rgba(197,144,124,.3)}
+.badge-avoidant{background:rgba(44,31,26,.08);color:var(--dark2);border:1px solid var(--border)}
+.badge-secure{background:rgba(122,155,120,.12);color:#4A7A48;border:1px solid rgba(122,155,120,.25)}
+.badge-fearful{background:rgba(155,128,120,.12);color:var(--muted);border:1px solid var(--border)}
+.attachment-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* Signal rows */
+.signals{display:flex;flex-direction:column;gap:8px}
+.signal-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg)}
+.signal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.signal-dot.red{background:#C9907C}
+.signal-dot.yellow{background:#C4965A}
+.signal-dot.green{background:#7A9B80}
+.signal-text{font-size:13px;color:var(--dark2);line-height:1.5}
+.signal-label{font-size:10px;font-weight:500;margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em}
+.signal-label.red{color:#8B5A4A}
+.signal-label.yellow{color:var(--gold)}
+.signal-label.green{color:#4A7A48}
+
+/* Madame verdict */
+.verdict{background:var(--dark);border-radius:12px;padding:18px 20px}
+.verdict-label{font-size:10px;letter-spacing:.18em;color:rgba(196,150,90,.5);text-transform:uppercase;margin-bottom:10px}
+.verdict-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(245,240,232,.88);line-height:1.85}
+
+/* Action advice */
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action-card{padding:14px;border-radius:10px;border:1px solid var(--border)}
+.action-card-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.action-card-label.do{color:#4A7A48}
+.action-card-label.dont{color:#8B5A4A}
+.action-card-text{font-size:13px;color:var(--dark2);line-height:1.55}
+
+.result-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px}
+.result-footer-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border2);font-size:12px;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;color:var(--muted);background:transparent}
+.result-footer-btn:hover{border-color:var(--gold);color:var(--gold)}
+.result-footer-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold);margin-left:auto}
+.result-footer-btn.primary:hover{opacity:.88}
+
+/* RIGHT PANEL — history */
+.right-panel{background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.right-header{padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.right-title{font-size:13px;font-weight:500;color:var(--dark);margin-bottom:2px}
+.right-sub{font-size:11px;color:var(--muted)}
+.right-scroll{flex:1;overflow-y:auto;padding:12px}
+.right-scroll::-webkit-scrollbar{width:3px}
+.right-scroll::-webkit-scrollbar-thumb{background:rgba(196,150,90,.2);border-radius:2px}
+
+.history-decode-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px;cursor:pointer;transition:all .18s}
+.history-decode-item:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow)}
+.hd-date{font-size:10px;color:var(--muted);margin-bottom:5px}
+.hd-preview{font-size:12px;color:var(--dark2);font-style:italic;font-family:'Cormorant Garamond',serif;line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hd-tags{display:flex;gap:5px;flex-wrap:wrap}
+.hd-tag{font-size:10px;padding:2px 8px;border-radius:6px;background:var(--bg3);color:var(--muted)}
+.hd-tag.avoidant{background:rgba(44,31,26,.08);color:var(--dark2)}
+.hd-tag.anxious{background:rgba(197,144,124,.12);color:#8B4A3A}
+.hd-tag.secure{background:rgba(122,155,120,.1);color:#4A7A48}
+
+/* Pattern tracker */
+.pattern-section{padding:14px 16px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.pattern-label{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.pattern-bars{display:flex;flex-direction:column;gap:7px}
+.pattern-bar-row{display:flex;align-items:center;gap:8px}
+.pattern-bar-name{font-size:11px;color:var(--muted);min-width:64px}
+.pattern-bar-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.pattern-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.pattern-bar-pct{font-size:10px;color:var(--muted);min-width:28px;text-align:right}
+
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Madame Richi</div>
+    <div class="logo-sub">Private sanctuary</div>
+  </div>
+  <div class="nav-section">Main</div>
+  <a class="nav-item" href="madame-dashboard.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Dashboard
+  </a>
+  <a class="nav-item" href="madame-chat.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Chat with Madame
+  </a>
+  <a class="nav-item" href="madame-podcasts.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    Podcasts
+  </a>
+  <a class="nav-item" href="madame-style-studio.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    Style Studio
+  </a>
+  <a class="nav-item active" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    Decode Him
+  </a>
+  <a class="nav-item" href="madame-pricing.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Membership
+  </a>
+  <div class="sidebar-bottom">
+    <div class="tier-badge">
+      <div class="tier-name">Confidante</div>
+      <div class="tier-sub">Decode Him · 7 of 10 left</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Decode Him</h1>
+      <p>Madame reads between the lines — so you don't have to</p>
+    </div>
+    <div class="topbar-right">
+      <div class="usage-pill"><span>7</span> decodes remaining this month</div>
+      <div class="topbar-badge">Confidante feature</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DECODE MAIN -->
+    <div class="decode-main">
+
+      <!-- Input mode tabs -->
+      <div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px">What would you like to decode?</p>
+        <div class="input-modes">
+          <div class="input-mode active" onclick="switchMode(this,'convo')">Conversation</div>
+          <div class="input-mode" onclick="switchMode(this,'single')">Single message</div>
+          <div class="input-mode" onclick="switchMode(this,'situation')">A situation</div>
+        </div>
+      </div>
+
+      <!-- Conversation builder -->
+      <div class="input-panel" id="panel-convo">
+        <div class="input-panel-header">
+          <div class="input-panel-title">Build the conversation</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="input-panel-hint">Type manually or upload a screenshot</div>
+            <button onclick="document.getElementById('screenshot-input').click()" style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Upload screenshot
+            </button>
+            <input type="file" id="screenshot-input" accept="image/*" style="display:none" onchange="handleScreenshot(event)">
+          </div>
+        </div>
+
+        <!-- Screenshot preview (hidden until uploaded) -->
+        <div id="screenshot-wrap" style="display:none;padding:14px 20px 0;border-bottom:1px solid var(--border)">
+          <div style="position:relative;display:inline-block;width:100%">
+            <img id="screenshot-img" style="width:100%;max-height:240px;object-fit:contain;object-position:top;border-radius:10px;border:1px solid var(--border);background:var(--bg3)" src="" alt="Screenshot">
+            <div style="position:absolute;top:8px;left:8px;background:rgba(44,31,26,.75);color:rgba(245,240,232,.8);border-radius:6px;padding:3px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase">Screenshot loaded</div>
+            <button onclick="removeScreenshot()" style="position:absolute;top:8px;right:8px;background:rgba(253,248,244,.9);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--dark);display:flex;align-items:center;gap:4px">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              Remove
+            </button>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin:8px 0 10px;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>
+            Madame will read the screenshot directly. You can also add context below.
+          </p>
+        </div>
+
+        <div class="convo-builder" id="convo-messages">
+          <div class="convo-msg" data-who="him">
+            <div class="convo-who him">Him</div>
+            <div class="convo-text him-msg">Hey, had a really good time the other night</div>
+            <button class="convo-delete" onclick="deleteMsg(this)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="convo-msg" data-who="you">
+            <div class="convo-who you">You</div>
+            <div class="convo-text you-msg">Me too! When can we do it again? 😊</div>
+            <button class="convo-delete" onclick="deleteMsg(this)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="convo-msg" data-who="him">
+            <div class="convo-who him">Him</div>
+            <div class="convo-text him-msg">Haha yeah for sure, let's figure something out</div>
+            <button class="convo-delete" onclick="deleteMsg(this)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="convo-msg" data-who="you">
+            <div class="convo-who you">You</div>
+            <div class="convo-text you-msg">Sounds good! I'm free this weekend</div>
+            <button class="convo-delete" onclick="deleteMsg(this)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="convo-msg" data-who="him">
+            <div class="convo-who him">Him</div>
+            <div class="convo-text him-msg">Cool, I'll let you know 👍</div>
+            <button class="convo-delete" onclick="deleteMsg(this)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Add message row -->
+        <div class="add-msg-row">
+          <div class="add-who-toggle">
+            <button class="who-btn active" id="who-him" onclick="setWho('him')">Him</button>
+            <button class="who-btn" id="who-you" onclick="setWho('you')">You</button>
+          </div>
+          <input type="text" class="add-msg-input" id="add-msg-input" placeholder="Type the message..." onkeydown="if(event.key==='Enter')addMsg()">
+          <button class="add-msg-btn" onclick="addMsg()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          </button>
+        </div>
+
+        <!-- Context -->
+        <div class="context-row">
+          <div class="context-label">Context for Madame</div>
+          <textarea class="context-input" id="context-input" placeholder="How long have you known him? When did this happen? What do you want to know?">We went on 2 dates. It's been 3 days since this conversation and no follow-up. I want to know if he's genuinely interested.</textarea>
+        </div>
+      </div>
+
+      <!-- Single message panel (hidden) -->
+      <div class="input-panel" id="panel-single" style="display:none">
+        <div class="input-panel-header">
+          <div class="input-panel-title">Paste his message</div>
+          <div class="input-panel-hint">Exactly as he wrote it</div>
+        </div>
+        <div style="padding:16px 20px">
+          <textarea style="width:100%;border:1px solid var(--border2);border-radius:10px;padding:12px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--dark);resize:none;height:100px;outline:none;background:#fff;line-height:1.7" placeholder="Paste his exact message here..." id="single-msg"></textarea>
+          <div class="context-row" style="padding:12px 0 0">
+            <div class="context-label">Context</div>
+            <textarea class="context-input" placeholder="What was the situation? What had you asked him?" style="height:50px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Situation panel (hidden) -->
+      <div class="input-panel" id="panel-situation" style="display:none">
+        <div class="input-panel-header">
+          <div class="input-panel-title">Describe the situation</div>
+          <div class="input-panel-hint">In your own words</div>
+        </div>
+        <div style="padding:16px 20px">
+          <textarea style="width:100%;border:1px solid var(--border2);border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);resize:none;height:140px;outline:none;background:#fff;line-height:1.7" placeholder="Tell Madame what happened, what he did or didn't do, and what is confusing you..." id="situation-text"></textarea>
+        </div>
+      </div>
+
+      <!-- Decode button -->
+      <button class="decode-btn" id="decode-btn" onclick="decode()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        Ask Madame to decode
+      </button>
+
+      <!-- Decoding animation -->
+      <div class="decoding-card" id="decoding-card">
+        <div class="decoding-label">Madame is reading</div>
+        <div class="decoding-dots">
+          <div class="d-dot"></div>
+          <div class="d-dot"></div>
+          <div class="d-dot"></div>
+        </div>
+        <div class="decoding-msg" id="decoding-msg">She is reading between the lines...</div>
+      </div>
+
+      <!-- Result -->
+      <div class="result-card" id="result-card">
+        <div class="result-header">
+          <div class="madame-avatar-sm">M</div>
+          <div class="result-header-text">
+            <h3>Madame's reading</h3>
+            <p>Conversation · 5 messages · Just now</p>
+          </div>
+        </div>
+
+        <div class="result-body">
+
+          <!-- Attachment type -->
+          <div class="attachment-row">
+            <div>
+              <div style="font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">His attachment style</div>
+              <div class="attachment-badge badge-avoidant">Avoidant tendency</div>
+            </div>
+            <div class="attachment-desc">
+              Keeps things vague and non-committal. Responds warmly but never initiates clarity. The "I'll let you know" without a time — this is avoidant language.
+            </div>
+          </div>
+
+          <!-- Signals -->
+          <div>
+            <div style="font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:10px">What Madame noticed</div>
+            <div class="signals">
+              <div class="signal-item">
+                <div class="signal-dot yellow"></div>
+                <div class="signal-text">
+                  <div class="signal-label yellow">Positive signal</div>
+                  He initiated with "had a really good time" — this is genuine. Men who are not interested do not send this.
+                </div>
+              </div>
+              <div class="signal-item">
+                <div class="signal-dot red"></div>
+                <div class="signal-text">
+                  <div class="signal-label red">Red flag</div>
+                  "Let's figure something out" and "I'll let you know" — both are non-commitments. He accepted your availability but made no plan. This is important.
+                </div>
+              </div>
+              <div class="signal-item">
+                <div class="signal-dot yellow"></div>
+                <div class="signal-text">
+                  <div class="signal-label yellow">Watch for</div>
+                  You offered your weekend. He said "cool." The power shifted in that moment. He is now in control of whether this happens.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verdict -->
+          <div class="verdict">
+            <div class="verdict-label">Madame's verdict</div>
+            <div class="verdict-text">
+              "He is interested but comfortable. Comfortable men do not pursue — they wait to be convenient.<br><br>
+              Three days of silence after this conversation tells you one thing: he is not thinking about you the way you are thinking about him. Not yet.<br><br>
+              This is not a reason to walk away. It is a reason to stop making yourself so available."
+            </div>
+          </div>
+
+          <!-- Do / Don't -->
+          <div class="action-row">
+            <div class="action-card">
+              <div class="action-card-label do">What to do</div>
+              <div class="action-card-text">Live your life visibly. Let him wonder if you are still available. One week of silence from your side will tell you everything.</div>
+            </div>
+            <div class="action-card">
+              <div class="action-card-label dont">What not to do</div>
+              <div class="action-card-text">Do not text first. Do not suggest another time. Do not make it easier for him to stay comfortable.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="result-footer">
+          <button class="result-footer-btn">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+            Hear Madame's voice
+          </button>
+          <button class="result-footer-btn" onclick="saveResult()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Save to history
+          </button>
+          <button class="result-footer-btn primary" onclick="continueInChat()">
+            Continue in chat →
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="right-header">
+        <div class="right-title">Previous decodes</div>
+        <div class="right-sub">3 this month · 7 remaining</div>
+      </div>
+
+      <div class="right-scroll">
+
+        <div class="history-decode-item">
+          <div class="hd-date">May 15 · Single message</div>
+          <div class="hd-preview">"Sorry been super busy, let's catch up soon"</div>
+          <div class="hd-tags">
+            <div class="hd-tag avoidant">Avoidant</div>
+            <div class="hd-tag">Pulling away</div>
+          </div>
+        </div>
+
+        <div class="history-decode-item">
+          <div class="hd-date">May 12 · Conversation</div>
+          <div class="hd-preview">"I really like you but I'm not looking for anything serious right now"</div>
+          <div class="hd-tags">
+            <div class="hd-tag anxious">Fearful-avoidant</div>
+            <div class="hd-tag">Clear signal</div>
+          </div>
+        </div>
+
+        <div class="history-decode-item">
+          <div class="hd-date">May 8 · Situation</div>
+          <div class="hd-preview">He watched my story but didn't reply to my message from 2 days ago</div>
+          <div class="hd-tags">
+            <div class="hd-tag avoidant">Avoidant</div>
+            <div class="hd-tag">Low priority</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pattern tracker -->
+      <div class="pattern-section">
+        <div class="pattern-label">His patterns this month</div>
+        <div class="pattern-bars">
+          <div class="pattern-bar-row">
+            <div class="pattern-bar-name">Avoidant</div>
+            <div class="pattern-bar-track">
+              <div class="pattern-bar-fill" id="pb1" style="width:0%;background:#8B7355"></div>
+            </div>
+            <div class="pattern-bar-pct">75%</div>
+          </div>
+          <div class="pattern-bar-row">
+            <div class="pattern-bar-name">Hot/cold</div>
+            <div class="pattern-bar-track">
+              <div class="pattern-bar-fill" id="pb2" style="width:0%;background:#C9907C"></div>
+            </div>
+            <div class="pattern-bar-pct">60%</div>
+          </div>
+          <div class="pattern-bar-row">
+            <div class="pattern-bar-name">Non-commit</div>
+            <div class="pattern-bar-track">
+              <div class="pattern-bar-fill" id="pb3" style="width:0%;background:#C4965A"></div>
+            </div>
+            <div class="pattern-bar-pct">80%</div>
+          </div>
+          <div class="pattern-bar-row">
+            <div class="pattern-bar-name">Genuine</div>
+            <div class="pattern-bar-track">
+              <div class="pattern-bar-fill" id="pb4" style="width:0%;background:#7A9B80"></div>
+            </div>
+            <div class="pattern-bar-pct">40%</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;font-style:italic;font-family:'Cormorant Garamond',serif">
+          "Ma chérie, the pattern is clear. The question is whether you are ready to see it."
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+let screenshotLoaded = false
+
+function handleScreenshot(e) {
+  const file = e.target.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    document.getElementById('screenshot-img').src = ev.target.result
+    document.getElementById('screenshot-wrap').style.display = 'block'
+    screenshotLoaded = true
+    // Clear manual messages when screenshot loaded
+    const msgs = document.getElementById('convo-messages')
+    msgs.innerHTML = '<div style="padding:10px 0;text-align:center;font-size:12px;color:var(--muted);font-style:italic;font-family:\'Cormorant Garamond\',serif">Screenshot added — Madame will read it directly.<br>You can still add context below.</div>'
+    document.getElementById('add-msg-input').placeholder = 'Add any extra context...'
+  }
+  reader.readAsDataURL(file)
+}
+
+function removeScreenshot() {
+  document.getElementById('screenshot-img').src = ''
+  document.getElementById('screenshot-wrap').style.display = 'none'
+  document.getElementById('screenshot-input').value = ''
+  screenshotLoaded = false
+  // Restore empty message builder
+  document.getElementById('convo-messages').innerHTML = ''
+  document.getElementById('add-msg-input').placeholder = 'Type the message...'
+}
+
+
+let currentMode = 'convo'
+
+// Input mode switch
+function switchMode(el, mode) {
+  document.querySelectorAll('.input-mode').forEach(m => m.classList.remove('active'))
+  el.classList.add('active')
+  currentMode = mode
+  document.getElementById('panel-convo').style.display = mode === 'convo' ? 'block' : 'none'
+  document.getElementById('panel-single').style.display = mode === 'single' ? 'block' : 'none'
+  document.getElementById('panel-situation').style.display = mode === 'situation' ? 'block' : 'none'
+}
+
+// Who toggle
+function setWho(who) {
+  currentWho = who
+  document.getElementById('who-him').classList.toggle('active', who === 'him')
+  document.getElementById('who-you').classList.toggle('active', who === 'you')
+}
+
+// Add message
+function addMsg() {
+  const input = document.getElementById('add-msg-input')
+  const text = input.value.trim()
+  if (!text) return
+  const container = document.getElementById('convo-messages')
+  const div = document.createElement('div')
+  div.className = 'convo-msg'
+  div.dataset.who = currentWho
+  div.style.animation = 'fadein .25s ease'
+  div.innerHTML = `
+    <div class="convo-who ${currentWho}">${currentWho === 'him' ? 'Him' : 'You'}</div>
+    <div class="convo-text ${currentWho}-msg">${text}</div>
+    <button class="convo-delete" onclick="deleteMsg(this)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>`
+  container.appendChild(div)
+  input.value = ''
+  input.focus()
+  // Toggle who for natural conversation flow
+  setWho(currentWho === 'him' ? 'you' : 'him')
+}
+
+function deleteMsg(btn) {
+  const row = btn.closest('.convo-msg')
+  row.style.opacity = '0'
+  row.style.transform = 'translateX(8px)'
+  row.style.transition = 'all .2s'
+  setTimeout(() => row.remove(), 200)
+}
+
+// Decode
+const decodingMsgs = [
+  'She is reading between the lines...',
+  'Madame is studying the pattern...',
+  'Checking against her experience...',
+  'Forming her honest assessment...',
+]
+
+function decode() {
+  document.getElementById('decode-btn').disabled = true
+  document.getElementById('decoding-card').classList.add('visible')
+  document.getElementById('result-card').style.display = 'none'
+
+  let mi = 0
+  const iv = setInterval(() => {
+    mi = (mi + 1) % decodingMsgs.length
+    document.getElementById('decoding-msg').textContent = decodingMsgs[mi]
+  }, 800)
+
+  setTimeout(() => {
+    clearInterval(iv)
+    document.getElementById('decoding-card').classList.remove('visible')
+    document.getElementById('decoding-card').style.display = 'none'
+    showResult()
+    // Animate pattern bars
+    setTimeout(() => {
+      document.getElementById('pb1').style.width = '75%'
+      document.getElementById('pb2').style.width = '60%'
+      document.getElementById('pb3').style.width = '80%'
+      document.getElementById('pb4').style.width = '40%'
+    }, 600)
+  }, 3000)
+}
+
+function showResult() {
+  const card = document.getElementById('result-card')
+  card.style.display = 'block'
+  card.classList.add('visible')
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  // Update usage
+  document.querySelector('.usage-pill').innerHTML = '<span>6</span> decodes remaining this month'
+  document.querySelector('.tier-sub').textContent = 'Decode Him · 6 of 10 left'
+}
+
+function saveResult() {
+  const list = document.querySelector('.right-scroll')
+  const item = document.createElement('div')
+  item.className = 'history-decode-item'
+  item.style.animation = 'fadein .3s ease'
+  item.innerHTML = `
+    <div class="hd-date">Just now · Conversation</div>
+    <div class="hd-preview">"Cool, I'll let you know 👍" — 3 days silence after 2 dates</div>
+    <div class="hd-tags">
+      <div class="hd-tag avoidant">Avoidant</div>
+      <div class="hd-tag">Non-committal</div>
+    </div>`
+  list.prepend(item)
+  const btn = document.querySelectorAll('.result-footer-btn')[1]
+  btn.innerHTML = '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Saved'
+  btn.style.color = '#4A7A48'
+}
+
+function continueInChat() {
+  window.location.href = 'madame-chat.html'
+}
+
+// Auto-show result on load for demo
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('result-card').style.display = 'block'
+    document.getElementById('result-card').classList.add('visible')
+    setTimeout(() => {
+      document.getElementById('pb1').style.width = '75%'
+      document.getElementById('pb2').style.width = '60%'
+      document.getElementById('pb3').style.width = '80%'
+      document.getElementById('pb4').style.width = '40%'
+    }, 400)
+  }, 300)
+})
+</script>
+</body>
+</html>

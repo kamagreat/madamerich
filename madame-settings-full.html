@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madame Richi — Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F4;--bg2:#FAF3EE;--bg3:#F5EDE6;
+  --rose:#E8C4B8;--rose-deep:#C9907C;--rose-dark:#8B5A4A;
+  --gold:#C4965A;--gold-light:#F0DEC8;
+  --dark:#2C1F1A;--dark2:#4A3228;--muted:#9B8078;
+  --border:rgba(196,150,90,0.18);--border2:rgba(196,150,90,0.32);
+  --shadow:0 2px 24px rgba(44,31,26,0.07);
+  --green:#4A7A48;--red:#8B5A4A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;flex-shrink:0;background:var(--dark);display:flex;flex-direction:column;padding:28px 0;height:100vh;position:sticky;top:0}
+.logo{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:8px}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px}
+.nav-section{padding:16px 12px 8px;font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.2);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;margin:1px 8px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.5);transition:all .18s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.nav-item.active{background:rgba(196,150,90,.15);color:var(--gold)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:16px 16px 0;border-top:1px solid rgba(255,255,255,.06)}
+.tier-badge{background:rgba(196,150,90,.12);border:1px solid rgba(196,150,90,.25);border-radius:8px;padding:12px 14px}
+.tier-name{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:2px}
+.tier-sub{font-size:11px;color:rgba(255,255,255,.3)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;overflow:hidden}
+
+/* ── SETTINGS SIDEBAR ── */
+.settings-nav{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:24px 12px;height:100vh;position:sticky;top:0;overflow-y:auto;background:var(--bg2)}
+.settings-nav-title{font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;padding:0 10px;margin-bottom:10px}
+.sn-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;text-decoration:none;margin-bottom:2px}
+.sn-item:hover{background:var(--bg3);color:var(--dark)}
+.sn-item.active{background:var(--gold-light);color:var(--rose-dark);font-weight:500}
+.sn-item svg{width:15px;height:15px;flex-shrink:0}
+.sn-divider{height:1px;background:var(--border);margin:10px 0}
+.sn-item.danger{color:var(--red)}
+.sn-item.danger:hover{background:rgba(197,144,124,.08)}
+.sn-item.danger.active{background:rgba(197,144,124,.12);color:var(--red)}
+
+/* ── PAGE CONTENT ── */
+.page-content{flex:1;overflow-y:auto;padding:32px 40px;max-width:700px}
+.page-content::-webkit-scrollbar{width:3px}
+.page-content::-webkit-scrollbar-thumb{background:rgba(196,150,90,.2);border-radius:2px}
+
+/* Page header */
+.page-header{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.page-header h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--dark);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--muted)}
+
+/* Sections */
+.section{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.section-header{padding:16px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-size:14px;font-weight:500;color:var(--dark)}
+.section-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.section-body{padding:20px 22px;display:flex;flex-direction:column;gap:18px}
+
+/* Fields */
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:12px;font-weight:500;color:var(--dark2)}
+.field-hint{font-size:11px;color:var(--muted);line-height:1.5}
+.field-input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--gold)}
+.field-input::placeholder{color:var(--muted)}
+.field-select{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);outline:none;cursor:pointer}
+.field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-inline{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.field-inline-left{}
+.field-divider{height:1px;background:var(--border)}
+
+/* Toggle */
+.toggle-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.toggle{width:40px;height:22px;border-radius:11px;background:var(--bg3);border:1px solid var(--border2);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--dark);border-color:var(--dark)}
+.toggle-thumb{width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;pointer-events:none}
+.toggle.on .toggle-thumb{transform:translateX(18px);background:var(--gold)}
+.toggle-label{font-size:12px;color:var(--muted);min-width:24px}
+.toggle.on+.toggle-label{color:var(--green)}
+
+/* Buttons */
+.btn-primary{background:var(--dark);color:var(--gold);border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s}
+.btn-primary:hover{opacity:.85}
+.btn-secondary{background:transparent;color:var(--dark);border:1px solid var(--border2);border-radius:8px;padding:10px 22px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(197,144,124,.4);border-radius:8px;padding:9px 18px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-danger:hover{background:rgba(197,144,124,.08)}
+.btn-gold{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s}
+.btn-gold:hover{opacity:.88}
+.btn-row{display:flex;gap:10px;margin-top:6px}
+
+/* Avatar */
+.avatar-section{display:flex;align-items:center;gap:18px}
+.user-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--rose) 0%,var(--gold-light) 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--rose-dark);flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .18s;position:relative}
+.user-avatar:hover{border-color:var(--gold)}
+.avatar-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(44,31,26,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.user-avatar:hover .avatar-overlay{opacity:1}
+.avatar-info p:first-child{font-size:14px;font-weight:500;color:var(--dark)}
+.avatar-info p:last-child{font-size:12px;color:var(--muted);margin-top:3px}
+.avatar-info .btn-secondary{margin-top:10px;padding:7px 14px;font-size:12px}
+
+/* Subscription card */
+.sub-card{background:var(--dark);border-radius:12px;padding:20px 22px}
+.sub-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.sub-plan-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);margin-bottom:3px}
+.sub-plan-meta{font-size:12px;color:rgba(245,240,232,.4)}
+.sub-active-badge{background:rgba(74,122,72,.2);border:1px solid rgba(74,122,72,.35);border-radius:20px;padding:4px 12px;font-size:11px;color:#7ABE78}
+.sub-features{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.sub-feature{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(245,240,232,.55)}
+.sub-feature svg{width:13px;height:13px;color:var(--gold);flex-shrink:0}
+.sub-actions{display:flex;gap:8px}
+.sub-btn-upgrade{background:var(--gold);color:#fff;border:none;border-radius:7px;padding:9px 18px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s}
+.sub-btn-upgrade:hover{opacity:.88}
+.sub-btn-manage{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);border-radius:7px;padding:9px 18px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.sub-btn-manage:hover{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.8)}
+
+/* Usage meters */
+.usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.usage-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.usage-label{font-size:11px;color:var(--muted);margin-bottom:6px}
+.usage-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);margin-bottom:6px}
+.usage-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.usage-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.usage-note{font-size:11px;color:var(--muted);margin-top:5px}
+
+/* Billing table */
+.billing-table{width:100%;border-collapse:collapse}
+.billing-table th{text-align:left;font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;padding:0 0 10px;border-bottom:1px solid var(--border);font-weight:500}
+.billing-table td{padding:12px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--dark2);vertical-align:middle}
+.billing-table tr:last-child td{border-bottom:none;padding-bottom:0}
+.billing-table th:last-child,.billing-table td:last-child{text-align:right}
+.status-paid{background:rgba(74,122,72,.1);color:var(--green);border-radius:6px;padding:2px 8px;font-size:11px}
+.receipt-link{color:var(--gold);cursor:pointer;font-size:12px}
+.receipt-link:hover{opacity:.7}
+
+/* Memory vault */
+.memory-list{display:flex;flex-direction:column;gap:8px}
+.memory-item{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;border-left:2px solid var(--rose)}
+.memory-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--dark2);line-height:1.5;flex:1}
+.memory-delete{background:transparent;border:none;cursor:pointer;color:var(--muted);padding:2px;border-radius:4px;display:flex;align-items:center;transition:color .15s;flex-shrink:0}
+.memory-delete:hover{color:var(--red)}
+.memory-date{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* Notification groups */
+.notif-group-label{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:12px;margin-top:4px}
+.notif-item{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+.notif-item:last-child{border-bottom:none;padding-bottom:0}
+.notif-title{font-size:13px;font-weight:500;color:var(--dark);margin-bottom:2px}
+.notif-sub{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* Voice preview */
+.voice-preview{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--dark);border-radius:10px}
+.voice-play{width:34px;height:34px;border-radius:50%;background:var(--gold);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.voice-play svg{width:13px;height:13px;color:#fff}
+.voice-wave-static{display:flex;align-items:center;gap:2px;flex:1}
+.voice-wave-bar{border-radius:1px;background:rgba(196,150,90,.35)}
+.voice-label{font-size:12px;color:rgba(245,240,232,.5)}
+
+/* Password strength */
+.pw-strength{display:flex;gap:4px;margin-top:6px}
+.pw-bar{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s}
+.pw-bar.weak{background:#C9907C}
+.pw-bar.medium{background:var(--gold)}
+.pw-bar.strong{background:var(--green)}
+.pw-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Data export card */
+.data-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.data-card-info p:first-child{font-size:13px;font-weight:500;color:var(--dark)}
+.data-card-info p:last-child{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+
+/* Danger section */
+.danger-section{background:#fff;border:1px solid rgba(197,144,124,.3);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.danger-header{padding:16px 22px 14px;border-bottom:1px solid rgba(197,144,124,.15)}
+.danger-title{font-size:14px;font-weight:500;color:var(--red)}
+.danger-body{padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.danger-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(197,144,124,.12)}
+.danger-row:last-child{border-bottom:none;padding-bottom:0}
+.danger-info p:first-child{font-size:13px;font-weight:500;color:var(--dark)}
+.danger-info p:last-child{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--dark);color:var(--gold);padding:10px 20px;border-radius:10px;font-size:13px;border:1px solid rgba(196,150,90,.25);opacity:0;transition:all .3s;pointer-events:none;z-index:999;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Page sections hidden by default */
+.settings-page{display:none;animation:fadein .3s ease}
+.settings-page.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- APP SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Madame Richi</div>
+    <div class="logo-sub">Private sanctuary</div>
+  </div>
+  <div class="nav-section">Main</div>
+  <a class="nav-item" href="madame-dashboard.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Dashboard
+  </a>
+  <a class="nav-item" href="madame-chat.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Chat with Madame
+  </a>
+  <a class="nav-item" href="madame-podcasts.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+    Podcasts
+  </a>
+  <a class="nav-item" href="madame-style-studio.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+    Style Studio
+  </a>
+  <a class="nav-item" href="madame-decode-him.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    Decode Him
+  </a>
+  <a class="nav-item" href="madame-pricing.html">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Membership
+  </a>
+  <div class="nav-section">Account</div>
+  <a class="nav-item active" href="#">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    Settings
+  </a>
+  <div class="sidebar-bottom">
+    <div class="tier-badge">
+      <div class="tier-name">Confidante</div>
+      <div class="tier-sub">$49/month · renews Jun 1</div>
+    </div>
+  </div>
+</aside>
+
+<!-- SETTINGS SIDEBAR -->
+<div class="settings-nav">
+  <div class="settings-nav-title">Settings</div>
+  <a class="sn-item active" href="#profile" onclick="nav('profile',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+    Profile
+  </a>
+  <a class="sn-item" href="#subscription" onclick="nav('subscription',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Subscription
+  </a>
+  <a class="sn-item" href="#notifications" onclick="nav('notifications',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+    Notifications
+  </a>
+  <a class="sn-item" href="#madame" onclick="nav('madame',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    Madame
+  </a>
+  <a class="sn-item" href="#privacy" onclick="nav('privacy',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    Privacy
+  </a>
+  <a class="sn-item" href="#password" onclick="nav('password',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+    Password
+  </a>
+  <div class="sn-divider"></div>
+  <a class="sn-item danger" href="#danger" onclick="nav('danger',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    Danger zone
+  </a>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-content">
+
+  <!-- ══ PROFILE ══ -->
+  <div class="settings-page active" id="page-profile">
+    <div class="page-header">
+      <h2>Profile</h2>
+      <p>How Madame knows you — your name, photo and basic details</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Your identity</div></div></div>
+      <div class="section-body">
+        <div class="avatar-section">
+          <div class="user-avatar">
+            E
+            <div class="avatar-overlay">
+              <svg width="18" height="18" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+          </div>
+          <div class="avatar-info">
+            <p>Elena Marchetti</p>
+            <p>Confidante · Member since March 2026</p>
+            <button class="btn-secondary" onclick="showToast('Choose a photo from your device')">Change photo</button>
+          </div>
+        </div>
+        <div class="field-row-2">
+          <div class="field">
+            <label class="field-label">First name</label>
+            <input type="text" class="field-input" value="Elena">
+          </div>
+          <div class="field">
+            <label class="field-label">Last name</label>
+            <input type="text" class="field-input" value="Marchetti">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Email address</label>
+          <input type="email" class="field-input" value="elena@example.com">
+        </div>
+        <div class="field">
+          <label class="field-label">What Madame calls you</label>
+          <input type="text" class="field-input" value="Elena" placeholder="Your chosen name">
+          <div class="field-hint">This is the name Madame uses in letters and conversations. Can be different from your real name.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Preferences</div></div></div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Timezone</label>
+          <select class="field-select">
+            <option>Europe/Paris (UTC+2)</option>
+            <option>Asia/Baku (UTC+4)</option>
+            <option>America/New_York (UTC-4)</option>
+            <option>Europe/London (UTC+1)</option>
+          </select>
+          <div class="field-hint">Used for your Daily Letter delivery time.</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Language</label>
+          <select class="field-select">
+            <option selected>English</option>
+            <option>French</option>
+            <option>Spanish</option>
+            <option>Italian</option>
+            <option>Russian</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="save()">Save profile</button>
+      <button class="btn-secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══ SUBSCRIPTION ══ -->
+  <div class="settings-page" id="page-subscription">
+    <div class="page-header">
+      <h2>Subscription</h2>
+      <p>Your current plan, usage and billing history</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Current plan</div></div></div>
+      <div class="section-body">
+        <div class="sub-card">
+          <div class="sub-card-top">
+            <div>
+              <div class="sub-plan-name">The Confidante</div>
+              <div class="sub-plan-meta">$49/month · Renews June 1, 2026</div>
+            </div>
+            <div class="sub-active-badge">Active</div>
+          </div>
+          <div class="sub-features">
+            <div class="sub-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Unlimited messages</div>
+            <div class="sub-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Voice replies + Deep Voice Sessions</div>
+            <div class="sub-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>All podcasts + notes + bookmarks</div>
+            <div class="sub-feature"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Style Studio · Decode Him (10/mo) · Memory Vault</div>
+          </div>
+          <div class="sub-actions">
+            <button class="sub-btn-upgrade" onclick="window.location.href='madame-pricing.html'">Upgrade to Daughter $199</button>
+            <button class="sub-btn-manage" onclick="showToast('Opening billing portal...')">Manage billing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">This month's usage</div></div></div>
+      <div class="section-body">
+        <div class="usage-grid">
+          <div class="usage-item">
+            <div class="usage-label">Messages</div>
+            <div class="usage-value">∞</div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:0%;background:var(--gold)"></div></div>
+            <div class="usage-note">Unlimited on Confidante</div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Decode Him</div>
+            <div class="usage-value">7 <span style="font-size:14px;color:var(--muted)">/ 10</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" id="ub-decode" style="width:0%;background:var(--gold)"></div></div>
+            <div class="usage-note">3 remaining this month</div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Voice calls</div>
+            <div class="usage-value">18 <span style="font-size:14px;color:var(--muted)">min</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" id="ub-voice" style="width:0%;background:var(--rose-deep)"></div></div>
+            <div class="usage-note">30 min/week included</div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Style Studio</div>
+            <div class="usage-value">4</div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:0%;background:#7A9B80"></div></div>
+            <div class="usage-note">Unlimited on Confidante</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div><div class="section-title">Billing history</div></div>
+        <button class="btn-secondary" style="padding:7px 14px;font-size:12px" onclick="showToast('Downloading all receipts...')">Download all</button>
+      </div>
+      <div class="section-body" style="padding:0">
+        <table class="billing-table" style="margin:0 22px;width:calc(100% - 44px)">
+          <thead><tr>
+            <th>Date</th><th>Plan</th><th>Amount</th><th>Status</th><th></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>May 1, 2026</td><td style="color:var(--muted)">Confidante · Monthly</td><td>$49.00</td><td><span class="status-paid">Paid</span></td><td><span class="receipt-link">Receipt</span></td></tr>
+            <tr><td>Apr 1, 2026</td><td style="color:var(--muted)">Confidante · Monthly</td><td>$49.00</td><td><span class="status-paid">Paid</span></td><td><span class="receipt-link">Receipt</span></td></tr>
+            <tr><td>Mar 1, 2026</td><td style="color:var(--muted)">Upgrade: Pupil → Confidante</td><td>$30.00</td><td><span class="status-paid">Paid</span></td><td><span class="receipt-link">Receipt</span></td></tr>
+            <tr><td>Feb 1, 2026</td><td style="color:var(--muted)">Pupil · Monthly</td><td>$19.00</td><td><span class="status-paid">Paid</span></td><td><span class="receipt-link">Receipt</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOTIFICATIONS ══ -->
+  <div class="settings-page" id="page-notifications">
+    <div class="page-header">
+      <h2>Notifications</h2>
+      <p>When and how Madame reaches you outside the app</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Email notifications</div><div class="section-sub">Sent to elena@example.com</div></div></div>
+      <div class="section-body">
+        <div class="notif-group-label">Daily</div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Daily Letter</div>
+            <div class="notif-sub">Receive Madame's morning letter by email every day</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field" style="margin-top:-6px">
+          <label class="field-label">Delivery time</label>
+          <select class="field-select" style="width:180px">
+            <option>6:00 AM</option><option selected>7:00 AM</option><option>8:00 AM</option><option>9:00 AM</option>
+          </select>
+          <div class="field-hint">Based on your timezone (Europe/Paris, UTC+2)</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="notif-group-label">Weekly</div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Weekly Mirror</div>
+            <div class="notif-sub">Madame's reflection on your week — delivered every Sunday morning</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="notif-group-label">Activity</div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Madame's replies</div>
+            <div class="notif-sub">Email when Madame responds to Letters to Madame in podcasts</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">New podcast episodes</div>
+            <div class="notif-sub">Notify when a new series episode is published</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">Off</span></div>
+        </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">Monthly personal audio letter</div>
+            <div class="notif-sub">Notify when your monthly letter from Madame is ready (Daughter plan)</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label" style="color:var(--muted);font-size:11px">Daughter only</span></div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="notif-group-label">Product</div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">New features</div>
+            <div class="notif-sub">Updates about new tools and improvements to Madame Richi</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">Off</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="save()">Save preferences</button>
+    </div>
+  </div>
+
+  <!-- ══ MADAME ══ -->
+  <div class="settings-page" id="page-madame">
+    <div class="page-header">
+      <h2>Madame settings</h2>
+      <p>Personalise how Madame speaks to you and what she remembers</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Voice</div></div></div>
+      <div class="section-body">
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Voice replies</div>
+            <div class="field-hint">Madame responds to your messages with her voice in addition to text</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Voice style</label>
+          <select class="field-select">
+            <option selected>Warm and intimate — close, personal</option>
+            <option>Direct and composed — clear, unhurried</option>
+            <option>Soft and gentle — tender, careful</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Voice preview</label>
+          <div class="voice-preview">
+            <button class="voice-play" onclick="showToast('Playing voice preview...')">
+              <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="voice-wave-static">
+              <div class="voice-wave-bar" style="height:8px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:18px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:24px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:14px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:20px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:10px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:22px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:16px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:12px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:20px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:8px;width:3px"></div>
+              <div class="voice-wave-bar" style="height:18px;width:3px"></div>
+            </div>
+            <div class="voice-label">"Good morning, ma chérie."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Memory</div><div class="section-sub">What Madame remembers about you</div></div></div>
+      <div class="section-body">
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Enable memory</div>
+            <div class="field-hint">Madame remembers key things from your conversations and uses them as context</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <label class="field-label">Memory Vault <span style="font-size:11px;color:var(--muted);font-weight:400">— 47 memories</span></label>
+            <button class="btn-secondary" style="padding:6px 12px;font-size:11px" onclick="showToast('Memory cleared')">Clear all</button>
+          </div>
+          <div class="memory-list">
+            <div class="memory-item">
+              <div><div class="memory-text">"Her ex left 4 months ago after 3 years together"</div><div class="memory-date">May 14</div></div>
+              <button class="memory-delete" onclick="deleteMemory(this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="memory-item">
+              <div><div class="memory-text">"She tends to over-explain herself to men she likes"</div><div class="memory-date">May 12</div></div>
+              <button class="memory-delete" onclick="deleteMemory(this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="memory-item">
+              <div><div class="memory-text">"Pattern: choosing emotionally unavailable men"</div><div class="memory-date">May 10</div></div>
+              <button class="memory-delete" onclick="deleteMemory(this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="memory-item">
+              <div><div class="memory-text">"Wants to feel desired without having to ask for it"</div><div class="memory-date">May 8</div></div>
+              <button class="memory-delete" onclick="deleteMemory(this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="memory-item">
+              <div><div class="memory-text">"Her ideal life in 3 years: living in a city she loves, with a man who chooses her every day"</div><div class="memory-date">May 5</div></div>
+              <button class="memory-delete" onclick="deleteMemory(this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Conversation</div></div></div>
+      <div class="section-body">
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Deep Voice Sessions</div>
+            <div class="field-hint">Allow Madame to offer deep voice session mode in chat</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Typing indicator</div>
+            <div class="field-hint">Show "Madame is thinking..." animation while waiting for reply</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Response length</label>
+          <select class="field-select">
+            <option>Concise — short and sharp (default)</option>
+            <option>Balanced — medium length</option>
+            <option>Expansive — full stories when appropriate</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="save()">Save settings</button>
+    </div>
+  </div>
+
+  <!-- ══ PRIVACY ══ -->
+  <div class="settings-page" id="page-privacy">
+    <div class="page-header">
+      <h2>Privacy</h2>
+      <p>Your data, how it's stored, and what you control</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Your data</div></div></div>
+      <div class="section-body">
+        <div style="padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px">
+          <p style="font-size:13px;font-weight:500;color:var(--dark);margin-bottom:6px">How Madame Richi handles your data</p>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7">Your conversations are end-to-end encrypted. We do not read, sell, or share your personal data with third parties. Madame uses your conversation history only to provide you with personalised responses — this data never leaves our systems for advertising or marketing purposes.</p>
+        </div>
+        <div class="data-card">
+          <div class="data-card-info">
+            <p>Export your data</p>
+            <p>Download a complete archive of your conversations, notes, memories and account data</p>
+          </div>
+          <button class="btn-secondary" onclick="showToast('Preparing export... You will receive an email shortly.')">Export</button>
+        </div>
+        <div class="data-card">
+          <div class="data-card-info">
+            <p>Conversation history</p>
+            <p>127 conversations · 4,831 messages since March 2026</p>
+          </div>
+          <button class="btn-secondary" onclick="showToast('All conversation history cleared')">Clear history</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Data usage</div></div></div>
+      <div class="section-body">
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Analytics</div>
+            <div class="field-hint">Share anonymised usage data to help improve Madame Richi. No personal content is ever shared.</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">Off</span></div>
+        </div>
+        <div class="field-inline">
+          <div class="field-inline-left">
+            <div class="field-label">Crash reports</div>
+            <div class="field-hint">Send automatic error reports to help us fix bugs faster</div>
+          </div>
+          <div class="toggle-wrap"><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div><span class="toggle-label">On</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PASSWORD ══ -->
+  <div class="settings-page" id="page-password">
+    <div class="page-header">
+      <h2>Password</h2>
+      <p>Update your password or set up additional security</p>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Change password</div></div></div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Current password</label>
+          <input type="password" class="field-input" placeholder="••••••••" id="pw-current">
+        </div>
+        <div class="field">
+          <label class="field-label">New password</label>
+          <input type="password" class="field-input" placeholder="Minimum 8 characters" id="pw-new" oninput="checkPwStrength(this.value)">
+          <div class="pw-strength">
+            <div class="pw-bar" id="pw-b1"></div>
+            <div class="pw-bar" id="pw-b2"></div>
+            <div class="pw-bar" id="pw-b3"></div>
+            <div class="pw-bar" id="pw-b4"></div>
+          </div>
+          <div class="pw-label" id="pw-strength-label">Enter a new password</div>
+        </div>
+        <div class="field">
+          <label class="field-label">Confirm new password</label>
+          <input type="password" class="field-input" placeholder="••••••••" id="pw-confirm">
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="changePassword()">Update password</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div><div class="section-title">Login sessions</div><div class="section-sub">Devices currently signed in to your account</div></div></div>
+      <div class="section-body">
+        <div class="notif-item" style="padding-top:0">
+          <div>
+            <div class="notif-title">MacBook Pro · Chrome</div>
+            <div class="notif-sub">Baku, Azerbaijan · Active now</div>
+          </div>
+          <span style="font-size:11px;background:rgba(74,122,72,.1);color:var(--green);padding:3px 8px;border-radius:6px">This device</span>
+        </div>
+        <div class="notif-item">
+          <div>
+            <div class="notif-title">iPhone 15 · Safari</div>
+            <div class="notif-sub">Baku, Azerbaijan · 2 hours ago</div>
+          </div>
+          <button class="btn-danger" style="padding:5px 12px;font-size:11px" onclick="showToast('Session ended')">Sign out</button>
+        </div>
+        <button class="btn-secondary" style="margin-top:4px;width:100%;font-size:12px" onclick="showToast('All other sessions signed out')">Sign out of all other devices</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DANGER ZONE ══ -->
+  <div class="settings-page" id="page-danger">
+    <div class="page-header">
+      <h2>Danger zone</h2>
+      <p>Irreversible actions — please read carefully before proceeding</p>
+    </div>
+
+    <div class="danger-section">
+      <div class="danger-header"><div class="danger-title">Account actions</div></div>
+      <div class="danger-body">
+
+        <div class="danger-row">
+          <div class="danger-info">
+            <p>Cancel subscription</p>
+            <p>Your Confidante access continues until June 1, 2026. Your data and conversation history are preserved after cancellation.</p>
+          </div>
+          <button class="btn-danger" onclick="confirmCancel()">Cancel subscription</button>
+        </div>
+
+        <div class="danger-row">
+          <div class="danger-info">
+            <p>Pause subscription</p>
+            <p>Pause billing for up to 3 months. Your account and data remain intact.</p>
+          </div>
+          <button class="btn-danger" onclick="showToast('Subscription paused for 1 month')">Pause for 1 month</button>
+        </div>
+
+        <div class="danger-row">
+          <div class="danger-info">
+            <p>Clear all memories</p>
+            <p>Remove everything Madame remembers about you. Your conversation history is not affected. This cannot be undone.</p>
+          </div>
+          <button class="btn-danger" onclick="showToast('Memory vault cleared. Madame will start fresh.')">Clear memories</button>
+        </div>
+
+        <div class="danger-row">
+          <div class="danger-info">
+            <p>Delete all conversations</p>
+            <p>Permanently delete your entire chat history. Cannot be undone.</p>
+          </div>
+          <button class="btn-danger" onclick="showToast('All conversations deleted')">Delete conversations</button>
+        </div>
+
+        <div class="danger-row" style="border-bottom:none;padding-bottom:0">
+          <div class="danger-info">
+            <p>Delete account</p>
+            <p>Permanently delete your account, all conversations, memories and data. Your subscription will be cancelled immediately. This absolutely cannot be undone.</p>
+          </div>
+          <button class="btn-danger" style="border-color:rgba(197,100,100,.5);color:#8B3A3A" onclick="confirmDelete()">Delete account</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page-content -->
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+  <span id="toast-text">Saved</span>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function nav(page, el) {
+  event.preventDefault()
+  document.querySelectorAll('.settings-page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.sn-item').forEach(n => n.classList.remove('active'))
+  document.getElementById('page-' + page).classList.add('active')
+  el.classList.add('active')
+  document.querySelector('.page-content').scrollTop = 0
+}
+
+// ── TOGGLE ──
+function toggleSwitch(el) {
+  el.classList.toggle('on')
+  const label = el.nextElementSibling
+  if (label && label.classList.contains('toggle-label')) {
+    label.textContent = el.classList.contains('on') ? 'On' : 'Off'
+  }
+}
+
+// ── SAVE ──
+function save() {
+  const btn = event.currentTarget
+  const orig = btn.textContent
+  btn.textContent = 'Saving...'
+  btn.disabled = true
+  setTimeout(() => {
+    btn.textContent = orig
+    btn.disabled = false
+    showToast('Changes saved')
+  }, 800)
+}
+
+// ── MEMORY DELETE ──
+function deleteMemory(btn) {
+  const item = btn.closest('.memory-item')
+  item.style.opacity = '0'
+  item.style.transform = 'translateX(8px)'
+  item.style.transition = 'all .2s'
+  setTimeout(() => item.remove(), 200)
+}
+
+// ── PASSWORD STRENGTH ──
+function checkPwStrength(val) {
+  const bars = ['pw-b1','pw-b2','pw-b3','pw-b4']
+  const label = document.getElementById('pw-strength-label')
+  bars.forEach(b => { document.getElementById(b).className = 'pw-bar' })
+  if (!val) { label.textContent = 'Enter a new password'; return }
+  let score = 0
+  if (val.length >= 8) score++
+  if (/[A-Z]/.test(val)) score++
+  if (/[0-9]/.test(val)) score++
+  if (/[^A-Za-z0-9]/.test(val)) score++
+  const classes = ['weak','weak','medium','strong']
+  const labels = ['Too short','Weak','Medium','Strong']
+  for (let i = 0; i < score; i++) document.getElementById(bars[i]).classList.add(classes[score-1])
+  label.textContent = labels[score-1] || 'Enter a new password'
+  label.style.color = score <= 1 ? 'var(--red)' : score === 2 ? 'var(--gold)' : 'var(--green)'
+}
+
+function changePassword() {
+  const cur = document.getElementById('pw-current').value
+  const nw = document.getElementById('pw-new').value
+  const conf = document.getElementById('pw-confirm').value
+  if (!cur) { showToast('Enter your current password'); return }
+  if (nw.length < 8) { showToast('New password must be at least 8 characters'); return }
+  if (nw !== conf) { showToast('Passwords do not match'); return }
+  showToast('Password updated successfully')
+  document.getElementById('pw-current').value = ''
+  document.getElementById('pw-new').value = ''
+  document.getElementById('pw-confirm').value = ''
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  document.getElementById('toast-text').textContent = msg
+  const t = document.getElementById('toast')
+  t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 2800)
+}
+
+// ── DANGER ──
+function confirmCancel() {
+  if (confirm('Cancel your Confidante subscription? You keep access until June 1, 2026.')) {
+    showToast('Subscription cancelled. Access continues until Jun 1.')
+  }
+}
+
+function confirmDelete() {
+  const input = prompt('Type DELETE to permanently delete your account and all data:')
+  if (input === 'DELETE') {
+    showToast('Account deleted. Redirecting...')
+    setTimeout(() => window.location.href = 'madame-auth.html', 2500)
+  }
+}
+
+// ── ANIMATE USAGE BARS ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const b = document.getElementById('ub-decode')
+    const v = document.getElementById('ub-voice')
+    if (b) b.style.width = '70%'
+    if (v) v.style.width = '60%'
+  }, 400)
+})
+
+// ── HASH ROUTING ──
+const hash = window.location.hash.replace('#','')
+if (hash) {
+  const el = document.querySelector('[href="#'+hash+'"]')
+  if (el) nav(hash, el)
+}
+</script>
+</body>
+</html>
